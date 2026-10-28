@@ -1,0 +1,42 @@
+---
+import Home from '../index.astro';
+import About from '../nosotros.astro';
+import Club from '../trading-club.astro';
+import Videos from '../videos.astro';
+import Webinars from '../aprende-lo-fundamental-del-trading.astro';
+import Project from '../guerra-de-traders.astro';
+import Events from '../proximos-eventos.astro';
+import Catalog from '../tienda/index.astro';
+import Contact from '../contacto.astro';
+import FAQ from '../preguntas-frecuentes-faq.astro';
+import Course from '../tienda/producto/[slug].astro';
+import { routes, getCourses } from '../../i18n/index';
+
+
+export function getStaticPaths() {
+  const pages = {
+    '/': Home,
+    '/nosotros/': About,
+    '/trading-club/': Club,
+    '/videos/': Videos,
+    '/aprende-lo-fundamental-del-trading/': Webinars,
+    '/guerra-de-traders/': Project,
+    '/proximos-eventos/': Events,
+    '/tienda/': Catalog,
+    '/contacto/': Contact,
+    '/preguntas-frecuentes-faq/': FAQ,
+  };
+  return [
+    ...Object.entries(pages).map(([path, Page]) => ({
+      params: {path: routes[path].slice(4, -1) || undefined},
+      props: {Page},
+    })),
+    ...getCourses('en').map(course => ({
+      params: {path: course.url.slice(4, -1)},
+      props: {Page: Course, course},
+    })),
+  ];
+}
+const {Page, course} = Astro.props;
+---
+<Page course={course}/>

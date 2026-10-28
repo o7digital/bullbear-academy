@@ -1,6 +1,10 @@
 ---
+import { getLocale, translator } from "../i18n/index";
 import Layout from "../layouts/Layout.astro";
 import FAQ from "../components/FAQ.astro";
 import Session from "../components/Session.astro";
+
+const lang = getLocale(Astro.url.pathname);
+const t = translator(lang);
 ---
-<Layout title="Preguntas frecuentes — Bull & Bear Academy"><section class="page-hero wrap"><span class="eyebrow">ANTES DEL PRIMER PASO</span><h1>Una decisión<br/><em>bien informada.</em></h1></section><FAQ/><Session/></Layout>
+<Layout title={t("Preguntas frecuentes — Bull & Bear Academy")}><section class="page-hero wrap"><span class="eyebrow">{t("ANTES DEL PRIMER PASO")}</span><h1>{t("Una decisión")}<br/><em>{t("bien informada.")}</em></h1></section><FAQ/><Session/></Layout>

@@ -1,1 +1,6 @@
-<section class="session-section section-pad"><div class="wrap split"><div><span class="eyebrow">05 — TU PRIMER PASO</span><h2>Una conversación.<br/><em>Un nuevo comienzo.</em></h2><p>Solicita una sesión estratégica gratuita y encuentra un punto de partida para tu formación.</p></div><div class="session-card"><span class="eyebrow">SESIÓN ESTRATÉGICA</span><h3>Hablemos de<br/>tus objetivos.</h3><p>Cuéntanos tu experiencia y qué te gustaría aprender. La academia confirmará la disponibilidad contigo.</p><button class="button button-dark" data-contact>Preparar mi solicitud <span>↗</span></button></div></div></section>
+---
+import { getLocale, translator } from "../i18n/index";
+
+const lang = getLocale(Astro.url.pathname);
+const t = translator(lang);
+---<section class="session-section section-pad"><div class="wrap split"><div><span class="eyebrow">{t("05 — TU PRIMER PASO")}</span><h2>{t("Una conversación.")}<br/><em>{t("Un nuevo comienzo.")}</em></h2><p>{t("Solicita una sesión estratégica gratuita y encuentra un punto de partida para tu formación.")}</p></div><div class="session-card"><span class="eyebrow">{t("SESIÓN ESTRATÉGICA")}</span><h3>{t("Hablemos de")}<br/>{t("tus objetivos.")}</h3><p>{t("Cuéntanos tu experiencia y qué te gustaría aprender. La academia confirmará la disponibilidad contigo.")}</p><button class="button button-dark" data-contact>{t("Preparar mi solicitud")} <span>↗</span></button></div></div></section>

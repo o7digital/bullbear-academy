@@ -1,5 +1,9 @@
 ---
+import { getLocale, translator, localizePath } from "../i18n/index";
 import Layout from "../layouts/Layout.astro";
 import Mentors from "../components/Mentors.astro";
+
+const lang = getLocale(Astro.url.pathname);
+const t = translator(lang);
 ---
-<Layout title="Nosotros — Bull & Bear Academy"><section class="page-hero wrap"><span class="eyebrow">NUESTRA HISTORIA</span><h1>Una visión.<br/><em>Una comunidad.</em></h1></section><section class="section-pad wrap split"><div class="history-year">2014<span>CIUDAD DE MÉXICO</span></div><div class="editorial-copy"><h2>El comienzo de<br/>una <em>convicción.</em></h2><p>Carlos Reyes fundó Bull & Bear Academy en 2014, en Ciudad de México, con la intención de impulsar una cultura de inversión y reunir a traders independientes alrededor de esa misión.</p><p>Hoy, la academia presenta formación presencial y online, además de acompañamiento de profesionales de distintos mercados.</p><a class="text-button" href="/tienda/">Conoce nuestros cursos ↗</a></div></section><Mentors/></Layout>
+<Layout title={t("Nosotros — Bull & Bear Academy")}><section class="page-hero wrap"><span class="eyebrow">{t("NUESTRA HISTORIA")}</span><h1>{t("Una visión.")}<br/><em>{t("Una comunidad.")}</em></h1></section><section class="section-pad wrap split"><div class="history-year">2014<span>{t("CIUDAD DE MÉXICO")}</span></div><div class="editorial-copy"><h2>{t("El comienzo de")}<br/>{t("una")} <em>{t("convicción.")}</em></h2><p>{t("Carlos Reyes fundó Bull & Bear Academy en 2014, en Ciudad de México, con la intención de impulsar una cultura de inversión y reunir a traders independientes alrededor de esa misión.")}</p><p>{t("Hoy, la academia presenta formación presencial y online, además de acompañamiento de profesionales de distintos mercados.")}</p><a class="text-button" href={localizePath("/tienda/", lang)}>{t("Conoce nuestros cursos ↗")}</a></div></section><Mentors/></Layout>
