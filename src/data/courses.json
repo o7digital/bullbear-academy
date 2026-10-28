@@ -1,0 +1,110 @@
+[
+  {
+    "title": "Curso de Criptomonedas 10 Hrs",
+    "category": "Criptomonedas",
+    "slug": "curso-de-criptomonedas-10-hrs",
+    "duration": "10 horas",
+    "mentor": "Luis González",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/curso-de-criptomonedas-10-hrs/",
+    "url": "/tienda/producto/curso-de-criptomonedas-10-hrs/"
+  },
+  {
+    "title": "Curso de Criptomonedas 25 Hrs",
+    "category": "Criptomonedas",
+    "slug": "curso-de-criptomonedas",
+    "duration": "25 horas",
+    "mentor": "Luis González",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/curso-de-criptomonedas/",
+    "url": "/tienda/producto/curso-de-criptomonedas/"
+  },
+  {
+    "title": "Curso Forex para todos",
+    "category": "Forex",
+    "slug": "forex-para-todos",
+    "duration": "10 horas",
+    "mentor": "Raúl Valdez",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/forex-para-todos/",
+    "url": "/tienda/producto/forex-para-todos/"
+  },
+  {
+    "title": "Desencriptando Forex",
+    "category": "Forex",
+    "slug": "desencriptando-forex",
+    "duration": "1 semana",
+    "mentor": "",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/desencriptando-forex/",
+    "url": "/tienda/producto/desencriptando-forex/"
+  },
+  {
+    "title": "Elliott Wave And Harmonic Patterns",
+    "category": "Forex",
+    "slug": "elliott-wave-and-harmonic-patterns",
+    "duration": "14 horas",
+    "mentor": "Raúl Valdez",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/elliott-wave-and-harmonic-patterns/",
+    "url": "/tienda/producto/elliott-wave-and-harmonic-patterns/"
+  },
+  {
+    "title": "Finanzas para no financieros",
+    "category": "Finanzas",
+    "slug": "finanzas-para-no-financieros",
+    "duration": "12 horas",
+    "mentor": "Juan Carlos Cruz",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/finanzas-para-no-financieros/",
+    "url": "/tienda/producto/finanzas-para-no-financieros/"
+  },
+  {
+    "title": "Finanzas personales",
+    "category": "Finanzas",
+    "slug": "finanzas-personales",
+    "duration": "Según nivel",
+    "mentor": "Juan Carlos Cruz",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/finanzas-personales/",
+    "url": "/tienda/producto/finanzas-personales/"
+  },
+  {
+    "title": "Portafolios de inversión",
+    "category": "Finanzas",
+    "slug": "portafolios-de-inversion",
+    "duration": "10 horas",
+    "mentor": "Joaquín Alducín",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/portafolios-de-inversion/",
+    "url": "/tienda/producto/portafolios-de-inversion/"
+  },
+  {
+    "title": "Trading con Forex",
+    "category": "Forex",
+    "slug": "trading-con-forex",
+    "duration": "25 horas",
+    "mentor": "Raúl Valdez",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/trading-con-forex/",
+    "url": "/tienda/producto/trading-con-forex/"
+  },
+  {
+    "title": "Trading con Futuros",
+    "category": "Futuros",
+    "slug": "trading-con-futuros",
+    "duration": "2–3 semanas",
+    "mentor": "Edgar Ulises Gonzalez",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/trading-con-futuros/",
+    "url": "/tienda/producto/trading-con-futuros/"
+  },
+  {
+    "title": "Trading Options",
+    "category": "Opciones",
+    "slug": "trading-options",
+    "duration": "10 horas",
+    "mentor": "Joaquín Alducín",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/trading-options/",
+    "url": "/tienda/producto/trading-options/"
+  },
+  {
+    "title": "Value Investing",
+    "category": "Finanzas",
+    "slug": "value-investing",
+    "duration": "10 horas",
+    "mentor": "Joaquín Alducín",
+    "official": "https://www.bullandbear-academy.com/tienda/producto/value-investing/",
+    "url": "/tienda/producto/value-investing/"
+  }
+]

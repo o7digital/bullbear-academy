@@ -1,0 +1,4 @@
+---
+const mentors = [["José Luis Morales", "Forex", "jose-luis"], ["Joaquín Alducín", "Opciones & futuros", "joaquin"], ["Edgar Ulises", "Futuros", "edgar"], ["Luis González", "Criptomonedas", "luis"], ["Raúl Valdez", "Forex", "raul"], ["Héctor Rojas", "Futuros & acciones", "hector"]];
+---
+<section id="mentores" class="mentors section-pad wrap"><div class="section-label"><span>NUESTROS TRADERS</span><span>SEIS PERSPECTIVAS. UNA MISMA VOCACIÓN.</span></div><div class="section-heading"><h2>La experiencia<br/><em>se comparte.</em></h2><p>Conoce al equipo que acompaña<br/>tu formación en los mercados.</p></div><div class="mentor-grid">{mentors.map(([name,role,image],index)=><article class="mentor-card"><div class="mentor-photo"><img src={`/assets/${image}.jpg`} alt={name} width="600" height="720" loading="lazy"/><span class="mentor-index">0{index+1} /</span><span class="mentor-specialty">{role}</span></div><h3>{name}</h3><p>{role}</p></article>)}</div></section>

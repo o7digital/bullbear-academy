@@ -1,0 +1,6 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import courses from '../../data/courses.json';
+const categories = ['Todos','Forex','Criptomonedas','Finanzas','Futuros','Opciones'];
+---
+<Layout title="Cursos — Bull & Bear Academy"><section class="page-hero wrap"><span class="eyebrow">NUESTROS CURSOS · 12 PROGRAMAS</span><h1>Encuentra tu<br/><em>siguiente nivel.</em></h1><p>Explora el catálogo y elige dónde quieres profundizar.</p></section><section class="wrap catalog-section"><div class="catalog-filters" role="group" aria-label="Filtrar cursos">{categories.map((c,i)=><button data-category={c} aria-pressed={i===0}>{c}</button>)}</div><p id="course-count" aria-live="polite">12 cursos</p><div class="catalog-grid">{courses.map((c,i)=><a class="catalog-card" href={c.url} data-course-category={c.category}><span class="course-meta">{c.category}</span><span class="catalog-index">{String(i+1).padStart(2,'0')}</span><h2>{c.title}</h2><div><span>{c.duration}</span><span>Explorar ↗</span></div></a>)}</div><p class="catalog-note">Consulta precios, modalidades y disponibilidad en la ficha oficial de cada programa.</p></section></Layout>
