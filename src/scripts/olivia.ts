@@ -1,5 +1,6 @@
 export {};
 import { languageTags, speechTags, type Locale } from '../i18n/locales';
+import { migrateLegacyAssistantMessage } from './chat-identity.mjs';
 type Message = { role: 'user' | 'assistant' | 'operator'; content: string; id?: string };
 type Session = { visitorId: string; consent: boolean; consentAt: string; open: boolean; language: Locale; siteLanguage: Locale; draft: string; messages: Message[] };
 const root = document.querySelector<HTMLElement>('[data-olivia]');
@@ -29,7 +30,7 @@ if (root) {
       session = { ...session, visitorId: saved.visitorId, consent: saved.consent === true, consentAt: typeof saved.consentAt === 'string' ? saved.consentAt : '', open: saved.open === true,
         language: siteLanguage,
         draft: typeof saved.draft === 'string' ? saved.draft.slice(0, 4000) : '',
-        messages: saved.messages.filter((m: Message) => ['user', 'assistant', 'operator'].includes(m?.role) && typeof m.content === 'string' && m.content.trim() && m.content.length <= 12000).slice(-24),
+        messages: saved.messages.filter((m: Message) => ['user', 'assistant', 'operator'].includes(m?.role) && typeof m.content === 'string' && m.content.trim() && m.content.length <= 12000).slice(-24).map(migrateLegacyAssistantMessage),
       };
     }
   } catch { /* Session storage is optional. */ }

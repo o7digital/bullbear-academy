@@ -34,6 +34,8 @@ Les huit langues partagent les composants et les mises en page. Les traductions 
 
 ## Charly IA v3.5
 
+Au chargement, les anciennes présentations de l’assistant enregistrées dans la session du navigateur sont mises à jour vers Charly. Le reste de la conversation, les messages du visiteur et les réponses humaines sont conservés. Les tests de cette migration se lancent avec `npm test`.
+
 Le widget est présenté sous le nom Charly IA. Il reprend le panneau arrondi, les couleurs crème et anthracite, les ombres et le mouvement flottant de `o7digital/suitesmine-bot/components/O7Widget.jsx`. Il est disponible sur les 176 pages. Le chat suit automatiquement la langue du site, sans sélecteur supplémentaire, et conserve le même échange en espagnol, anglais, russe, chinois simplifié, allemand, italien, français ou portugais. La dictée utilise la langue choisie lorsque le navigateur la prend en charge.
 
 Les messages ne sont envoyés qu'après consentement. Le service partagé `https://olivia-ai.o7digital.com` fournit une identité signée liée au domaine `bullbear-academy-preview.vercel.app` et au profil isolé `bullbear`, puis conserve les échanges dans la boîte de réception Olivia. Aucun secret n'est présent dans ce site statique. Le navigateur conserve l'historique, le consentement et l'état du chat dans `sessionStorage`, y compris lors du changement de langue ; « Nouvelle conversation » efface cet historique local, sans supprimer les données du service.
