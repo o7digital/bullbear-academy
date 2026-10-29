@@ -18,7 +18,7 @@ npm run build
 npm run preview
 ```
 
-Astro génère les 88 pages statiques dans `dist/`. Vercel utilise la configuration de `vercel.json`.
+Astro génère les 176 pages statiques dans `dist/`. Vercel utilise la configuration de `vercel.json`.
 
 ## Périmètre
 
@@ -28,13 +28,13 @@ Consulter [les consignes de livraison](INSTRUCTIONS-CODEX.md) et [les sources](S
 
 ## Langues
 
-La version espagnole reste à la racine ; les versions anglaise, russe et chinoise (chinois simplifié) se trouvent sous `/en/`, `/ru/` et `/zh/`. Le sélecteur Español / English / Русский / 中文 mène à la page équivalente dans les quatre langues, y compris pour les douze cours.
+La version espagnole reste à la racine ; les versions anglaise, russe, chinoise (chinois simplifié), allemande, italienne, française et portugaise (Brésil) se trouvent sous `/en/`, `/ru/`, `/zh/`, `/de/`, `/it/`, `/fr/` et `/pt/`. Le sélecteur Español / English / Русский / 中文 / Deutsch / Italiano / Français / Português mène à la page équivalente dans les huit langues, y compris pour les douze cours.
 
-Les quatre langues partagent les composants et les mises en page. Les traductions sont dans `src/i18n/en.json`, `ru.json` et `zh.json` ; les correspondances des routes et des fiches de cours sont dans `src/i18n/index.ts`. Les pages traduites utilisent `src/pages/[locale]/[...path].astro`. Le formulaire WhatsApp et le compteur des filtres utilisent les mêmes dictionnaires, avec les pluriels adaptés à chaque langue. Les URLs officielles externes conservent leur destination d’origine.
+Les huit langues partagent les composants et les mises en page. Les traductions sont dans `src/i18n/en.json`, `ru.json`, `zh.json`, `de.json`, `it.json`, `fr.json` et `pt.json` ; les correspondances des routes et des fiches de cours sont dans `src/i18n/index.ts` ; les langues et les voix sont centralisées dans `src/i18n/locales.ts`. Les pages traduites utilisent `src/pages/[locale]/[...path].astro`. Le formulaire WhatsApp et le compteur des filtres utilisent les mêmes dictionnaires, avec les pluriels adaptés à chaque langue. Les URLs officielles externes conservent leur destination d’origine.
 
 ## Olivia IA v3.5
 
-Le widget reprend le panneau arrondi, les couleurs crème et anthracite, les ombres et le mouvement flottant de `o7digital/suitesmine-bot/components/O7Widget.jsx`. Il est disponible sur les 88 pages. L'interface suit la langue du site ; son propre sélecteur permet de poursuivre le même échange en espagnol, anglais, russe ou chinois simplifié. La dictée utilise la langue choisie lorsque le navigateur la prend en charge.
+Le widget reprend le panneau arrondi, les couleurs crème et anthracite, les ombres et le mouvement flottant de `o7digital/suitesmine-bot/components/O7Widget.jsx`. Il est disponible sur les 176 pages. L'interface suit la langue du site ; son propre sélecteur permet de poursuivre le même échange en espagnol, anglais, russe, chinois simplifié, allemand, italien, français ou portugais. La dictée utilise la langue choisie lorsque le navigateur la prend en charge.
 
 Les messages ne sont envoyés qu'après consentement. Le service partagé `https://olivia-ai.o7digital.com` fournit une identité signée liée au domaine `bullbear-academy-preview.vercel.app` et au profil isolé `bullbear`, puis conserve les échanges dans la boîte de réception Olivia. Aucun secret n'est présent dans ce site statique. Le navigateur conserve l'historique, le consentement et l'état du chat dans `sessionStorage`, y compris lors du changement de langue ; « Nouvelle conversation » efface cet historique local, sans supprimer les données du service.
 

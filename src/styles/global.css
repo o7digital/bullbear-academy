@@ -66,3 +66,17 @@ html:lang(zh) .hero h1{font-size:clamp(70px,7vw,108px)}
   html:lang(zh) .hero h1{font-size:clamp(64px,20vw,82px)}
 }
 @media(max-width:480px){html:lang(ru) .feature-grid{grid-template-columns:1fr}}
+
+/* Give the additional languages room for longer words and eight language links. */
+html:is(:lang(de),:lang(it),:lang(fr),:lang(pt)) :is(h1,h2,h3){overflow-wrap:break-word;hyphens:auto}
+html:is(:lang(de),:lang(it),:lang(fr),:lang(pt)) :is(.feature-grid,.method-grid,.split,.catalog-grid,.news-grid,.faq-grid,.footer-main,.section-heading)>*{min-width:0}
+@media(min-width:761px) and (max-width:1000px){.concept-strip>span:first-child{display:none}.concept-strip{justify-content:flex-end}}
+@media(min-width:1001px) and (max-width:1150px){
+  html:is(:lang(de),:lang(it),:lang(fr),:lang(pt)) :is(.desktop-nav a,.nav-dropdown summary,.nav-cta){font-size:12px}
+  html:is(:lang(de),:lang(it),:lang(fr),:lang(pt)) .desktop-nav{gap:10px}
+}
+@media(max-width:760px){
+  html:lang(de) h2{font-size:clamp(34px,10.5vw,44px)}
+  html:lang(de) .club-panel h3{font-size:clamp(34px,10vw,46px)}
+}
+@media(max-width:480px){html:lang(de) .feature-grid{grid-template-columns:1fr}}

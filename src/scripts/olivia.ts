@@ -1,5 +1,5 @@
 export {};
-type Locale = 'es' | 'en' | 'ru' | 'zh';
+import { locales, languageTags, speechTags, type Locale } from '../i18n/locales';
 type Message = { role: 'user' | 'assistant' | 'operator'; content: string; id?: string };
 type Session = { visitorId: string; consent: boolean; consentAt: string; open: boolean; language: Locale; siteLanguage: Locale; draft: string; messages: Message[] };
 const root = document.querySelector<HTMLElement>('[data-olivia]');
@@ -7,7 +7,7 @@ if (root) {
   const api = 'https://olivia-ai.o7digital.com';
   const clientCode = 'bullbear';
   const storageKey = 'bullbear:olivia:3.5';
-  const languages: Locale[] = ['es', 'en', 'ru', 'zh'];
+  const languages: readonly Locale[] = locales;
   const siteLanguage = root.dataset.language as Locale;
   const copies = JSON.parse(root.dataset.copy!);
   const panel = root.querySelector<HTMLDialogElement>('.olivia-panel')!;
@@ -87,7 +87,7 @@ if (root) {
   function translate() {
     copy = copies[session.language];
     root!.querySelectorAll<HTMLElement>('[data-olivia-text]').forEach(node => node.textContent = copy[node.dataset.oliviaText!]);
-    panel.lang = session.language === 'zh' ? 'zh-Hans' : session.language;
+    panel.lang = languageTags[session.language];
     root!.dataset.currentLanguage = session.language;
     launch.setAttribute('aria-label', copy.open); close.setAttribute('aria-label', copy.close);
     languageSelect.setAttribute('aria-label', copy.language); languageSelect.value = session.language;
@@ -184,7 +184,7 @@ if (root) {
     mic.addEventListener('click', () => {
       if (busy || !session.consent) return;
       if (mic.getAttribute('aria-pressed') === 'true') { recognition?.stop(); return; }
-      recognition = new SpeechRecognition(); recognition.lang = { es: 'es-MX', en: 'en-US', ru: 'ru-RU', zh: 'zh-CN' }[session.language];
+      recognition = new SpeechRecognition(); recognition.lang = speechTags[session.language];
       recognition.interimResults = false;
       recognition.onstart = () => { mic.setAttribute('aria-pressed', 'true'); status('listening'); };
       recognition.onend = () => { mic.setAttribute('aria-pressed', 'false'); if (feedbackKey === 'listening') status(); };

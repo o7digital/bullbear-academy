@@ -1,13 +1,15 @@
 import english from './en.json';
 import russian from './ru.json';
 import chinese from './zh.json';
+import german from './de.json';
+import italian from './it.json';
+import french from './fr.json';
+import portuguese from './pt.json';
 import courses from '../data/courses.json';
+import { locales, type Locale } from './locales';
+export { locales, languageNames, languageTags, type Locale } from './locales';
 
-export const locales = ['es', 'en', 'ru', 'zh'] as const;
-export type Locale = typeof locales[number];
-export const languageNames: Record<Locale, string> = { es: 'Español', en: 'English', ru: 'Русский', zh: '中文' };
-export const languageTags: Record<Locale, string> = { es: 'es', en: 'en', ru: 'ru', zh: 'zh-Hans' };
-const dictionaries: Record<Exclude<Locale, 'es'>, Record<string, string>> = { en: english, ru: russian, zh: chinese };
+const dictionaries: Record<Exclude<Locale, 'es'>, Record<string, string>> = { en: english, ru: russian, zh: chinese, de: german, it: italian, fr: french, pt: portuguese };
 export const getLocale = (pathname: string): Locale =>
   locales.find(locale => locale !== 'es' && new RegExp(`^/${locale}(?:/|$)`).test(pathname)) ?? 'es';
 export const translator = (locale: Locale) => (text: string): string =>
@@ -49,7 +51,7 @@ export function localizePath(pathname: string, locale: Locale): string {
   const [, rawPath, suffix = ''] = pathname.match(/^([^?#]*)(.*)$/)!;
   const path = rawPath.endsWith('/') ? rawPath : `${rawPath}/`;
   const sourceLocale = getLocale(path);
-  const englishPath = sourceLocale === 'es' ? path : path.replace(/^\/(en|ru|zh)\//, '/en/');
+  const englishPath = sourceLocale === 'es' ? path : `/en${path.slice(sourceLocale.length + 1)}`;
   const spanish = spanishRoutes[englishPath] ?? path;
   const result = locale === 'es' ? spanish : (routes[spanish] ?? path).replace(/^\/en\//, `/${locale}/`);
   return result + suffix;
