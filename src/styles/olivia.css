@@ -21,7 +21,6 @@
 .olivia-presence{display:inline-flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid #ffffff1a;border-radius:999px;background:#ffffff12;color:#ffffffcc;font-size:11px}
 .olivia-presence i{width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#34d399;box-shadow:0 0 0 4px #34d39924,0 0 14px #34d399cc}
 .olivia-widget[data-idle=true] .olivia-presence i{background:#fbbf24;box-shadow:0 0 0 4px #fbbf2424,0 0 14px #fbbf24aa}
-.olivia-widget [data-olivia-language]{width:auto;max-width:130px;min-height:32px;padding:4px 8px;border:1px solid #ffffff33;border-radius:8px;background:#36332e;color:#fff;font-size:12px}
 .olivia-log{flex:1;min-height:65px;overflow-y:auto;overscroll-behavior:contain;padding:18px 16px;background:var(--olivia-soft);scroll-behavior:smooth}
 .olivia-message{max-width:92%;width:fit-content;border:1px solid #e3dbcd;border-radius:16px 16px 16px 4px;background:#fffdf8;margin-bottom:13px;padding:12px 14px;box-shadow:0 4px 9px #3b302508;overflow-wrap:anywhere}
 .olivia-message b{display:block;margin-bottom:5px;font-size:10px;font-weight:600;color:#8a754f}

@@ -1,5 +1,5 @@
 ---
-import { getLocale, locales, languageNames, languageTags } from '../i18n/index';
+import { getLocale, languageTags } from '../i18n/index';
 import { oliviaCopy } from '../data/olivia';
 import '../styles/olivia.css';
 const lang = getLocale(Astro.url.pathname);
@@ -15,7 +15,6 @@ const copy = oliviaCopy[lang];
       </div>
       <div class="olivia-toolbar">
         <span class="olivia-presence"><i aria-hidden="true"></i><span data-olivia-text="available">{copy.available}</span></span>
-        <select data-olivia-language aria-label={copy.language}>{locales.map(locale => <option value={locale} lang={languageTags[locale]} selected={locale === lang}>{languageNames[locale]}</option>)}</select>
       </div>
     </header>
     <div class="olivia-log" data-olivia-log role="log" aria-live="polite" aria-relevant="additions text">

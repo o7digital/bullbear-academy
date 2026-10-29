@@ -1,5 +1,5 @@
 export {};
-import { locales, languageTags, speechTags, type Locale } from '../i18n/locales';
+import { languageTags, speechTags, type Locale } from '../i18n/locales';
 type Message = { role: 'user' | 'assistant' | 'operator'; content: string; id?: string };
 type Session = { visitorId: string; consent: boolean; consentAt: string; open: boolean; language: Locale; siteLanguage: Locale; draft: string; messages: Message[] };
 const root = document.querySelector<HTMLElement>('[data-olivia]');
@@ -7,7 +7,6 @@ if (root) {
   const api = 'https://olivia-ai.o7digital.com';
   const clientCode = 'bullbear';
   const storageKey = 'bullbear:olivia:3.5';
-  const languages: readonly Locale[] = locales;
   const siteLanguage = root.dataset.language as Locale;
   const copies = JSON.parse(root.dataset.copy!);
   const panel = root.querySelector<HTMLDialogElement>('.olivia-panel')!;
@@ -17,7 +16,6 @@ if (root) {
   const form = root.querySelector<HTMLFormElement>('[data-olivia-form]')!;
   const input = root.querySelector<HTMLTextAreaElement>('[data-olivia-input]')!;
   const consent = root.querySelector<HTMLInputElement>('[data-olivia-consent]')!;
-  const languageSelect = root.querySelector<HTMLSelectElement>('[data-olivia-language]')!;
   const send = root.querySelector<HTMLButtonElement>('[data-olivia-send]')!;
   const reset = root.querySelector<HTMLButtonElement>('[data-olivia-reset]')!;
   const mic = root.querySelector<HTMLButtonElement>('[data-olivia-mic]')!;
@@ -29,7 +27,7 @@ if (root) {
     const saved = JSON.parse(sessionStorage.getItem(storageKey) || 'null');
     if (saved && /^[a-zA-Z0-9_-]{1,80}$/.test(saved.visitorId) && Array.isArray(saved.messages)) {
       session = { ...session, visitorId: saved.visitorId, consent: saved.consent === true, consentAt: typeof saved.consentAt === 'string' ? saved.consentAt : '', open: saved.open === true,
-        language: saved.siteLanguage === siteLanguage && languages.includes(saved.language) ? saved.language : siteLanguage,
+        language: siteLanguage,
         draft: typeof saved.draft === 'string' ? saved.draft.slice(0, 4000) : '',
         messages: saved.messages.filter((m: Message) => ['user', 'assistant', 'operator'].includes(m?.role) && typeof m.content === 'string' && m.content.trim() && m.content.length <= 12000).slice(-24),
       };
@@ -79,7 +77,7 @@ if (root) {
   }
   function controls() {
     send.disabled = busy || !session.consent;
-    reset.disabled = busy; languageSelect.disabled = busy; input.readOnly = busy;
+    reset.disabled = busy; input.readOnly = busy;
     mic.disabled = busy || !session.consent;
     suggestions.forEach(button => button.disabled = busy || !session.consent);
     form.setAttribute('aria-busy', String(busy));
@@ -90,7 +88,6 @@ if (root) {
     panel.lang = languageTags[session.language];
     root!.dataset.currentLanguage = session.language;
     launch.setAttribute('aria-label', copy.open); close.setAttribute('aria-label', copy.close);
-    languageSelect.setAttribute('aria-label', copy.language); languageSelect.value = session.language;
     input.placeholder = copy.placeholder; input.setAttribute('aria-label', copy.placeholder);
     send.setAttribute('aria-label', copy.send); mic.setAttribute('aria-label', copy.mic);
     status(feedbackKey, feedback.dataset.error === 'true');
@@ -109,7 +106,6 @@ if (root) {
   consent.addEventListener('change', () => { session.consent = consent.checked; session.consentAt = consent.checked ? new Date().toISOString() : ''; if (!consent.checked) recognition?.stop(); save(); controls(); });
   input.addEventListener('input', () => { session.draft = input.value; save(); input.style.height = '46px'; input.style.height = `${Math.min(input.scrollHeight, 115)}px`; });
   input.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) { event.preventDefault(); form.requestSubmit(); } });
-  languageSelect.addEventListener('change', () => { if (languages.includes(languageSelect.value as Locale)) { recognition?.stop(); session.language = languageSelect.value as Locale; save(); translate(); } });
   reset.addEventListener('click', () => {
     if (busy) return;
     session.messages = []; session.visitorId = crypto.randomUUID(); session.draft = ''; input.value = ''; contact.hidden = true;
