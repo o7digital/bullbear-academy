@@ -55,12 +55,19 @@ if (root) {
     article.className = 'olivia-message'; article.dataset.role = message.role;
     const author = document.createElement('b'); author.textContent = message.role === 'user' ? copy.you : 'Olivia';
     const paragraph = document.createElement('p');
-    const pattern = /https?:\/\/[^\s<>"\]\)]+/g;
+    // Format only explicit bold and HTTP(S) links; model output never becomes HTML.
+    const pattern = /\[[^\]\n]+\]\(https?:\/\/[^\s<>"\)]+\)|https?:\/\/[^\s<>"\]\)]+|\*\*[^*\n]+\*\*/g;
     let end = 0;
     for (const match of message.content.matchAll(pattern)) {
       paragraph.append(document.createTextNode(message.content.slice(end, match.index)));
-      const link = document.createElement('a');
-      link.href = match[0]; link.textContent = match[0]; link.target = '_blank'; link.rel = 'noopener noreferrer'; paragraph.append(link);
+      if (match[0].startsWith('**')) {
+        const strong = document.createElement('strong'); strong.textContent = match[0].slice(2, -2); paragraph.append(strong);
+      } else {
+        const markdown = match[0].match(/^\[([^\]]+)\]\((https?:\/\/.+)\)$/);
+        const link = document.createElement('a');
+        link.href = markdown?.[2] || match[0]; link.textContent = markdown?.[1] || match[0];
+        link.target = '_blank'; link.rel = 'noopener noreferrer'; paragraph.append(link);
+      }
       end = match.index! + match[0].length;
     }
     paragraph.append(document.createTextNode(message.content.slice(end)));
