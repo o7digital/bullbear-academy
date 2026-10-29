@@ -1,10 +1,17 @@
 import english from './en.json';
+import russian from './ru.json';
+import chinese from './zh.json';
 import courses from '../data/courses.json';
 
-export type Locale = 'es' | 'en';
-export const getLocale = (pathname: string): Locale => pathname.startsWith('/en/') ? 'en' : 'es';
+export const locales = ['es', 'en', 'ru', 'zh'] as const;
+export type Locale = typeof locales[number];
+export const languageNames: Record<Locale, string> = { es: 'Español', en: 'English', ru: 'Русский', zh: '中文' };
+export const languageTags: Record<Locale, string> = { es: 'es', en: 'en', ru: 'ru', zh: 'zh-Hans' };
+const dictionaries: Record<Exclude<Locale, 'es'>, Record<string, string>> = { en: english, ru: russian, zh: chinese };
+export const getLocale = (pathname: string): Locale =>
+  locales.find(locale => locale !== 'es' && new RegExp(`^/${locale}(?:/|$)`).test(pathname)) ?? 'es';
 export const translator = (locale: Locale) => (text: string): string =>
-  locale === 'en' ? (english as Record<string, string>)[text] ?? text : text;
+  locale === 'es' ? text : dictionaries[locale][text] ?? text;
 
 const pageRoutes: Record<string, string> = {
   '/': '/en/',
@@ -39,10 +46,13 @@ export const routes: Record<string, string> = {
 const spanishRoutes = Object.fromEntries(Object.entries(routes).map(([es, en]) => [en, es]));
 
 export function localizePath(pathname: string, locale: Locale): string {
-  const [path, fragment] = pathname.split('#');
-  const spanish = spanishRoutes[path] ?? path;
-  const result = locale === 'en' ? routes[spanish] ?? path : spanish;
-  return result + (fragment === undefined ? '' : `#${fragment}`);
+  const [, rawPath, suffix = ''] = pathname.match(/^([^?#]*)(.*)$/)!;
+  const path = rawPath.endsWith('/') ? rawPath : `${rawPath}/`;
+  const sourceLocale = getLocale(path);
+  const englishPath = sourceLocale === 'es' ? path : path.replace(/^\/(en|ru|zh)\//, '/en/');
+  const spanish = spanishRoutes[englishPath] ?? path;
+  const result = locale === 'es' ? spanish : (routes[spanish] ?? path).replace(/^\/en\//, `/${locale}/`);
+  return result + suffix;
 }
 
 export function getCourses(locale: Locale) {

@@ -18,7 +18,7 @@ npm run build
 npm run preview
 ```
 
-Astro génère les 44 pages statiques dans `dist/`. Vercel utilise la configuration de `vercel.json`.
+Astro génère les 88 pages statiques dans `dist/`. Vercel utilise la configuration de `vercel.json`.
 
 ## Périmètre
 
@@ -28,6 +28,6 @@ Consulter [les consignes de livraison](INSTRUCTIONS-CODEX.md) et [les sources](S
 
 ## Langues
 
-La version espagnole reste à la racine et la version anglaise se trouve sous `/en/`. Le sélecteur ES / EN mène à la page équivalente, y compris pour les douze cours.
+La version espagnole reste à la racine ; les versions anglaise, russe et chinoise (chinois simplifié) se trouvent sous `/en/`, `/ru/` et `/zh/`. Le sélecteur Español / English / Русский / 中文 mène à la page équivalente dans les quatre langues, y compris pour les douze cours.
 
-Les deux langues partagent les composants et les mises en page. Les traductions sont dans `src/i18n/en.json` ; les correspondances des routes et des fiches de cours sont dans `src/i18n/index.ts`. Les URLs officielles externes conservent leur destination d’origine.
+Les quatre langues partagent les composants et les mises en page. Les traductions sont dans `src/i18n/en.json`, `ru.json` et `zh.json` ; les correspondances des routes et des fiches de cours sont dans `src/i18n/index.ts`. Les pages traduites utilisent `src/pages/[locale]/[...path].astro`. Le formulaire WhatsApp et le compteur des filtres utilisent les mêmes dictionnaires, avec les pluriels adaptés à chaque langue. Les URLs officielles externes conservent leur destination d’origine.

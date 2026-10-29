@@ -10,8 +10,7 @@ import Catalog from '../tienda/index.astro';
 import Contact from '../contacto.astro';
 import FAQ from '../preguntas-frecuentes-faq.astro';
 import Course from '../tienda/producto/[slug].astro';
-import { routes, getCourses } from '../../i18n/index';
-
+import { locales, getCourses, localizePath } from '../../i18n/index';
 
 export function getStaticPaths() {
   const pages = {
@@ -26,17 +25,17 @@ export function getStaticPaths() {
     '/contacto/': Contact,
     '/preguntas-frecuentes-faq/': FAQ,
   };
-  return [
+  return locales.filter(locale => locale !== 'es').flatMap(locale => [
     ...Object.entries(pages).map(([path, Page]) => ({
-      params: {path: routes[path].slice(4, -1) || undefined},
-      props: {Page},
+      params: { locale, path: localizePath(path, locale).slice(locale.length + 2, -1) || undefined },
+      props: { Page },
     })),
-    ...getCourses('en').map(course => ({
-      params: {path: course.url.slice(4, -1)},
-      props: {Page: Course, course},
+    ...getCourses(locale).map(course => ({
+      params: { locale, path: course.url.slice(locale.length + 2, -1) },
+      props: { Page: Course, course },
     })),
-  ];
+  ]);
 }
-const {Page, course} = Astro.props;
+const { Page, course } = Astro.props;
 ---
 <Page course={course}/>
