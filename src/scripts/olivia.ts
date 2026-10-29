@@ -2,7 +2,10 @@ export {};
 import { languageTags, speechTags, type Locale } from '../i18n/locales';
 import { migrateLegacyAssistantMessage } from './chat-identity.mjs';
 type Message = { role: 'user' | 'assistant' | 'operator'; content: string; id?: string };
-type Session = { visitorId: string; consent: boolean; consentAt: string; open: boolean; language: Locale; siteLanguage: Locale; draft: string; messages: Message[] };
+type Lead = { firstName: string; lastName: string; email: string; phone: string; details: string };
+type Session = { visitorId: string; consent: boolean; consentAt: string; open: boolean; language: Locale; siteLanguage: Locale; draft: string; messages: Message[];
+  lead: Lead; leadOpen: boolean; leadStatus: string; leadSubmissionId: string; leadDismissed: boolean; interest: string; summary: string; contactConsent: boolean };
+const emptyLead = (): Lead => ({ firstName: '', lastName: '', email: '', phone: '', details: '' });
 const root = document.querySelector<HTMLElement>('[data-olivia]');
 if (root) {
   const api = 'https://olivia-ai.o7digital.com';
@@ -23,7 +26,9 @@ if (root) {
   const feedback = root.querySelector<HTMLElement>('[data-olivia-feedback]')!;
   const contact = root.querySelector<HTMLAnchorElement>('[data-olivia-contact]')!;
   const suggestions = [...root.querySelectorAll<HTMLButtonElement>('[data-olivia-prompt]')];
-  let session: Session = { visitorId: crypto.randomUUID(), consent: false, consentAt: '', open: false, language: siteLanguage, siteLanguage, draft: '', messages: [] };
+  const leadTemplate = root.querySelector<HTMLTemplateElement>('[data-olivia-lead-template]')!;
+  let session: Session = { visitorId: crypto.randomUUID(), consent: false, consentAt: '', open: false, language: siteLanguage, siteLanguage, draft: '', messages: [],
+    lead: emptyLead(), leadOpen: false, leadStatus: '', leadSubmissionId: '', leadDismissed: false, interest: '', summary: '', contactConsent: false };
   try {
     const saved = JSON.parse(sessionStorage.getItem(storageKey) || 'null');
     if (saved && /^[a-zA-Z0-9_-]{1,80}$/.test(saved.visitorId) && Array.isArray(saved.messages)) {
@@ -31,11 +36,18 @@ if (root) {
         language: siteLanguage,
         draft: typeof saved.draft === 'string' ? saved.draft.slice(0, 4000) : '',
         messages: saved.messages.filter((m: Message) => ['user', 'assistant', 'operator'].includes(m?.role) && typeof m.content === 'string' && m.content.trim() && m.content.length <= 12000).slice(-24).map(migrateLegacyAssistantMessage),
+        lead: Object.fromEntries(Object.keys(emptyLead()).map(key => [key, typeof saved.lead?.[key] === 'string' ? saved.lead[key].slice(0, key === 'details' ? 4000 : 254) : ''])) as Lead,
+        leadOpen: saved.leadOpen === true, leadStatus: saved.leadStatus === 'received' ? 'received' : '',
+        leadSubmissionId: typeof saved.leadSubmissionId === 'string' && /^[a-zA-Z0-9_-]{1,80}$/.test(saved.leadSubmissionId) ? saved.leadSubmissionId : '',
+        leadDismissed: saved.leadDismissed === true, contactConsent: saved.contactConsent === true,
+        interest: typeof saved.interest === 'string' ? saved.interest.slice(0, 200) : '', summary: typeof saved.summary === 'string' ? saved.summary.slice(0, 4000) : '',
       };
     }
   } catch { /* Session storage is optional. */ }
   let copy = copies[session.language];
   let busy = false;
+  let leadBusy = false;
+  let leadError = false;
   let polling = false;
   let identity = '';
   let identityExpires = 0;
@@ -75,13 +87,66 @@ if (root) {
   }
   function render() {
     log.replaceChildren(); append({ role: 'assistant', content: copy.greeting }); session.messages.forEach(append);
+    root!.querySelector<HTMLElement>('.olivia-suggestions')!.hidden = session.messages.length > 0;
+    renderLead();
+  }
+  function renderLead() {
+    log.querySelectorAll('[data-olivia-lead], [data-lead-receipt]').forEach(node => node.remove());
+    if (session.leadStatus === 'received') {
+      const receipt = document.createElement('p'); receipt.className = 'olivia-lead-receipt'; receipt.dataset.leadReceipt = '';
+      receipt.textContent = copy.leadSent; log.append(receipt); return;
+    }
+    if (!session.leadOpen) return;
+    const leadForm = leadTemplate.content.firstElementChild!.cloneNode(true) as HTMLFormElement;
+    leadForm.querySelectorAll<HTMLElement>('[data-olivia-text]').forEach(node => { node.textContent = copy[node.dataset.oliviaText!]; });
+    for (const key of Object.keys(emptyLead()) as (keyof Lead)[]) {
+      const field = leadForm.elements.namedItem(key) as HTMLInputElement | HTMLTextAreaElement;
+      field.value = session.lead[key]; field.disabled = leadBusy;
+      field.addEventListener('input', () => { field.setCustomValidity(''); session.lead[key] = field.value; save(); });
+    }
+    const agreement = leadForm.elements.namedItem('contactConsent') as HTMLInputElement;
+    agreement.checked = session.contactConsent; agreement.disabled = leadBusy;
+    agreement.addEventListener('change', () => { session.contactConsent = agreement.checked; save(); });
+    leadForm.querySelector<HTMLElement>('[data-lead-feedback]')!.textContent = leadError ? copy.leadError : '';
+    const submit = leadForm.querySelector<HTMLButtonElement>('[type="submit"]')!;
+    submit.textContent = leadBusy ? copy.leadSubmitting : copy.leadSubmit;
+    submit.disabled = busy || leadBusy || !session.consent;
+    const cancel = leadForm.querySelector<HTMLButtonElement>('[data-lead-cancel]')!; cancel.disabled = leadBusy;
+    cancel.addEventListener('click', () => { session.leadOpen = false; session.leadDismissed = true; save(); renderLead(); input.focus({ preventScroll: true }); });
+    leadForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (busy || leadBusy || !session.consent || !leadForm.reportValidity()) return;
+      const phone = leadForm.elements.namedItem('phone') as HTMLInputElement;
+      if (!/^[+\d\s().-]+$/.test(phone.value) || !/^\d{8,15}$/.test(phone.value.replace(/\D/g, ''))) {
+        phone.setCustomValidity(copy.leadPhoneError); phone.reportValidity(); return;
+      }
+      session.leadSubmissionId ||= crypto.randomUUID(); save();
+      leadBusy = true; leadError = false; renderLead(); controls();
+      try {
+        await identify();
+        const result = await request('/api/widget/leads', 'POST', { clientCode, visitorId: session.visitorId,
+          submissionId: session.leadSubmissionId, language: session.language, lead: session.lead, interest: session.interest,
+          dataConsent: session.consent, contactConsent: session.contactConsent });
+        if (result.received !== true || result.submissionId !== session.leadSubmissionId) throw new Error('Contact request not confirmed');
+        if (result.lead) for (const key of Object.keys(emptyLead()) as (keyof Lead)[]) {
+          if (typeof result.lead[key] === 'string') session.lead[key] = result.lead[key];
+        }
+        session.leadStatus = 'received'; session.leadOpen = false;
+        session.messages.push({ role: 'user', content: `${copy.leadSubmission}\n${session.lead.firstName} ${session.lead.lastName}\n${session.lead.email}\n${session.lead.phone}\n${session.lead.details}` });
+        session.messages = session.messages.slice(-24); save();
+      } catch { leadError = true; }
+      finally { leadBusy = false; render(); controls(); log.scrollTop = log.scrollHeight; }
+    });
+    log.append(leadForm);
   }
   function controls() {
-    send.disabled = busy || !session.consent;
-    reset.disabled = busy; input.readOnly = busy;
-    mic.disabled = busy || !session.consent;
-    suggestions.forEach(button => button.disabled = busy || !session.consent);
-    form.setAttribute('aria-busy', String(busy));
+    send.disabled = busy || leadBusy || !session.consent;
+    reset.disabled = busy || leadBusy; input.readOnly = busy || leadBusy;
+    mic.disabled = busy || leadBusy || !session.consent;
+    suggestions.forEach(button => button.disabled = busy || leadBusy || !session.consent);
+    const leadSubmit = log.querySelector<HTMLButtonElement>('[data-olivia-lead] [type="submit"]');
+    if (leadSubmit) leadSubmit.disabled = busy || leadBusy || !session.consent;
+    form.setAttribute('aria-busy', String(busy || leadBusy));
   }
   function translate() {
     copy = copies[session.language];
@@ -108,8 +173,10 @@ if (root) {
   input.addEventListener('input', () => { session.draft = input.value; save(); input.style.height = '46px'; input.style.height = `${Math.min(input.scrollHeight, 115)}px`; });
   input.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) { event.preventDefault(); form.requestSubmit(); } });
   reset.addEventListener('click', () => {
-    if (busy) return;
+    if (busy || leadBusy) return;
     session.messages = []; session.visitorId = crypto.randomUUID(); session.draft = ''; input.value = ''; contact.hidden = true;
+    session.lead = emptyLead(); session.leadOpen = false; session.leadStatus = ''; session.leadSubmissionId = ''; session.leadDismissed = false;
+    session.interest = ''; session.summary = ''; session.contactConsent = false; leadError = false;
     status(); save(); render(); input.focus({ preventScroll: true });
   });
   suggestions.forEach(button => button.addEventListener('click', () => { input.value = copy[button.dataset.oliviaPrompt!]; form.requestSubmit(); }));
@@ -133,7 +200,7 @@ if (root) {
     identity = data.identity; identityExpires = Date.now() + 50 * 60 * 1000;
   }
   async function sync() {
-    if (!panel.open || busy || polling || !session.consent || !session.messages.length || document.hidden) return;
+    if (!panel.open || busy || leadBusy || polling || !session.consent || !session.messages.length || document.hidden) return;
     polling = true;
     try {
       await identify();
@@ -152,12 +219,13 @@ if (root) {
   }
   form.addEventListener('submit', async event => {
     event.preventDefault(); const message = input.value.trim();
-    if (!message || busy || !session.consent) return;
+    if (!message || busy || leadBusy || !session.consent) return;
     recognition?.stop(); busy = true; controls(); status('thinking'); contact.hidden = true;
     const history = session.messages.map(({ role, content }) => ({ role: role === 'operator' ? 'assistant' : role, content })).slice(-12);
     session.draft = message; save(); append({ role: 'user', content: message }); input.value = '';
     const language = session.language;
-    const metadata = { language, pageUrl: location.href, pageTitle: document.title, pageContent: document.querySelector('main')?.textContent?.replace(/\s+/g, ' ').slice(0, 5000) || '', dataConsent: true, dataConsentAt: session.consentAt, consentVersion: 'bullbear-olivia-3.5-2026-10-28' };
+    const metadata = { language, pageUrl: location.href, pageTitle: document.title, pageContent: document.querySelector('main')?.textContent?.replace(/\s+/g, ' ').slice(0, 5000) || '', dataConsent: true, dataConsentAt: session.consentAt, consentVersion: 'bullbear-olivia-3.5-2026-10-28',
+      academyInterest: session.interest, academyRequestSummary: session.summary, handoffStage: session.leadDismissed ? 'declined' : '' };
     const common = { clientCode, visitorId: session.visitorId, language, source: 'website', metadata };
     try {
       await identify();
@@ -167,9 +235,23 @@ if (root) {
       }
       const answer = await request('/api/olivia/chat', 'POST', { ...common, message, history });
       if (answer.clientCode !== clientCode || answer.language !== language || !answer.model || typeof answer.reply !== 'string' || !answer.reply.trim()) throw new Error('Unexpected reply');
+      const previousSummary = session.summary;
+      if (typeof answer.academyInterest === 'string') session.interest = answer.academyInterest;
+      if (typeof answer.academyRequestSummary === 'string') session.summary = answer.academyRequestSummary;
+      if (session.leadStatus !== 'received') {
+        session.leadOpen = answer.action === 'show_lead_form';
+        if (session.leadOpen) {
+          session.leadDismissed = false;
+          const values = answer.leadForm?.values || {};
+          for (const key of ['firstName', 'lastName', 'email', 'phone'] as const) {
+            if (!session.lead[key] && typeof values[key] === 'string') session.lead[key] = values[key];
+          }
+          if (!session.lead.details || session.lead.details === previousSummary) session.lead.details = answer.leadForm?.initialDetails || session.summary;
+        }
+      }
       session.messages.push({ role: 'user', content: message }, { role: 'assistant', content: answer.reply });
       session.messages = session.messages.slice(-24); session.draft = ''; save(); render(); status();
-      contact.hidden = !answer.handoffRecommended;
+      contact.hidden = true;
       await request('/api/widget/conversations', 'PATCH', { ...common, content: answer.reply, model: answer.model }).catch(() => {});
     } catch {
       render(); input.value = message; status('error', true); contact.hidden = false;

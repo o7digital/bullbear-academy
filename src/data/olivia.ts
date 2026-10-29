@@ -1,10 +1,11 @@
 import type { Locale } from '../i18n/index';
+import { academyLeadCopy } from './academy-lead';
 
 const keys = ['subtitle', 'greeting', 'placeholder', 'send', 'consent', 'privacy', 'privacyBody', 'thinking', 'error', 'close', 'open', 'clear', 'contact', 'language', 'available', 'idle', 'you', 'manual', 'courses', 'coursesPrompt', 'club', 'clubPrompt', 'contactPrompt', 'mic', 'listening', 'micError'] as const;
 const translations: Record<Locale, readonly string[]> = {
   de: [
     'Ihr Wegweiser durch die Akademie',
-    'Guten Tag, ich bin Charly, der KI-Assistent von Bull & Bear Academy. Ich helfe Ihnen, die Kurse und den Trading Club kennenzulernen und einen passenden Einstieg für Ihre Erfahrung zu finden. Was möchten Sie lernen?',
+    'Guten Tag, ich bin Charly von Bull & Bear Academy. Zu welchem Kurs oder Angebot möchten Sie mehr erfahren?',
     'Ihre Frage…', 'Senden',
     'Ich stimme zu, dass Charly meine Nachrichten verarbeitet und speichert, um meine Anfrage zu beantworten.',
     'Datenschutz',
@@ -18,7 +19,7 @@ const translations: Record<Locale, readonly string[]> = {
   ],
   it: [
     'La tua guida nell’accademia',
-    'Ciao, sono Charly, l’assistente IA di Bull & Bear Academy. Posso aiutarti a conoscere i corsi, il Trading Club e a trovare un punto di partenza adatto alla tua esperienza. Cosa vorresti imparare?',
+    'Ciao, sono Charly di Bull & Bear Academy. Su quale corso o servizio vorresti informazioni?',
     'Scrivi la tua domanda…', 'Invia',
     'Acconsento al trattamento e alla conservazione dei miei messaggi da parte di Charly per rispondere alla mia richiesta.',
     'Privacy',
@@ -32,7 +33,7 @@ const translations: Record<Locale, readonly string[]> = {
   ],
   fr: [
     'Votre guide dans l’académie',
-    'Bonjour, je suis Charly, l’assistant IA de Bull & Bear Academy. Je peux vous présenter les formations, le Trading Club et vous aider à trouver un point de départ adapté à votre expérience. Que souhaitez-vous apprendre ?',
+    'Bonjour, je suis Charly de Bull & Bear Academy. Sur quelle formation ou quel service souhaitez-vous des informations ?',
     'Votre question…', 'Envoyer',
     'J’accepte que Charly traite et conserve mes messages pour répondre à ma demande.',
     'Confidentialité',
@@ -46,7 +47,7 @@ const translations: Record<Locale, readonly string[]> = {
   ],
   pt: [
     'Seu guia na academia',
-    'Olá, sou Charly, o assistente de IA da Bull & Bear Academy. Posso apresentar os cursos, o Trading Club e ajudar a encontrar um ponto de partida de acordo com sua experiência. O que você gostaria de aprender?',
+    'Olá, sou Charly da Bull & Bear Academy. Sobre qual curso ou serviço você gostaria de saber mais?',
     'Digite sua pergunta…', 'Enviar',
     'Concordo que o Charly processe e armazene minhas mensagens para responder à minha consulta.',
     'Privacidade',
@@ -60,7 +61,7 @@ const translations: Record<Locale, readonly string[]> = {
   ],
   es: [
     'Tu guía en la academia',
-    'Hola, soy Charly, el asistente IA de Bull & Bear Academy. Puedo ayudarte a conocer los cursos, el Trading Club y encontrar un punto de partida según tu experiencia. ¿Qué te gustaría aprender?',
+    'Hola, soy Charly de Bull & Bear Academy. ¿Sobre qué curso o servicio te gustaría informarte?',
     'Escribe tu pregunta…', 'Enviar',
     'Acepto que Charly procese y conserve mis mensajes para responder a mi consulta.',
     'Privacidad',
@@ -74,7 +75,7 @@ const translations: Record<Locale, readonly string[]> = {
   ],
   en: [
     'Your guide to the academy',
-    'Hello, I’m Charly, Bull & Bear Academy’s AI assistant. I can help you explore courses, the Trading Club and a starting point that suits your experience. What would you like to learn?',
+    'Hello, I’m Charly from Bull & Bear Academy. Which course or service would you like to know about?',
     'Ask your question…', 'Send',
     'I agree to Charly processing and storing my messages to answer my enquiry.',
     'Privacy',
@@ -88,7 +89,7 @@ const translations: Record<Locale, readonly string[]> = {
   ],
   ru: [
     'Ваш проводник в академии',
-    'Здравствуйте! Я Charly, ИИ-ассистент Bull & Bear Academy. Помогу узнать о курсах, трейдинг-клубе и выбрать отправную точку с учётом вашего опыта. Чему вы хотите научиться?',
+    'Здравствуйте! Я Charly из Bull & Bear Academy. О каком курсе или услуге вы хотите узнать?',
     'Ваш вопрос…', 'Отправить',
     'Я соглашаюсь на обработку и хранение моих сообщений Charly для ответа на мой запрос.',
     'Конфиденциальность',
@@ -102,7 +103,7 @@ const translations: Record<Locale, readonly string[]> = {
   ],
   zh: [
     '您的学院学习向导',
-    '您好，我是 Charly，Bull & Bear Academy 的 AI 助手。我可以为您介绍课程、交易俱乐部，并根据您的经验寻找合适的学习起点。您想学习什么？',
+    '您好，我是 Bull & Bear Academy 的 Charly。您想了解哪门课程或哪项服务？',
     '请输入您的问题…', '发送',
     '我同意 Charly 处理和保存我的消息，以回复我的咨询。',
     '隐私',
@@ -117,5 +118,5 @@ const translations: Record<Locale, readonly string[]> = {
 };
 
 export const oliviaCopy = Object.fromEntries(Object.entries(translations).map(([locale, values]) => [
-  locale, Object.fromEntries(keys.map((key, index) => [key, values[index]])),
-])) as Record<Locale, Record<typeof keys[number], string>>;
+  locale, { ...Object.fromEntries(keys.map((key, index) => [key, values[index]])), ...academyLeadCopy[locale as Locale] },
+])) as Record<Locale, Record<typeof keys[number] | keyof typeof academyLeadCopy['es'], string>>;
