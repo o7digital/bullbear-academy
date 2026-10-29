@@ -53,7 +53,7 @@ if (root) {
   function append(message: Message) {
     const article = document.createElement('article');
     article.className = 'olivia-message'; article.dataset.role = message.role;
-    const author = document.createElement('b'); author.textContent = message.role === 'user' ? copy.you : 'Olivia';
+    const author = document.createElement('b'); author.textContent = message.role === 'user' ? copy.you : 'Carlos';
     const paragraph = document.createElement('p');
     // Format only explicit bold and HTTP(S) links; model output never becomes HTML.
     const pattern = /\[[^\]\n]+\]\(https?:\/\/[^\s<>"\)]+\)|https?:\/\/[^\s<>"\]\)]+|\*\*[^*\n]+\*\*/g;
