@@ -1,0 +1,65 @@
+import type { Locale } from '../i18n/index';
+
+const keys = ['subtitle', 'greeting', 'placeholder', 'send', 'consent', 'privacy', 'privacyBody', 'thinking', 'error', 'close', 'open', 'clear', 'contact', 'language', 'available', 'idle', 'you', 'manual', 'courses', 'coursesPrompt', 'club', 'clubPrompt', 'contactPrompt', 'mic', 'listening', 'micError'] as const;
+const translations: Record<Locale, readonly string[]> = {
+  es: [
+    'Tu guía en la academia',
+    'Hola, soy Olivia, la asistente IA de Bull & Bear Academy. Puedo ayudarte a conocer los cursos, el Trading Club y encontrar un punto de partida según tu experiencia. ¿Qué te gustaría aprender?',
+    'Escribe tu pregunta…', 'Enviar',
+    'Acepto que Olivia procese y conserve mis mensajes para responder a mi consulta.',
+    'Privacidad',
+    'Al enviar un mensaje con tu aceptación, tus mensajes, idioma y contexto de la página se transmiten al servicio Olivia y a OpenAI para generar una respuesta. Las conversaciones pueden conservarse para el seguimiento por el equipo. El historial de este navegador dura la sesión y continúa al cambiar de idioma. «Nueva conversación» borra solo ese historial local. Para consultas sobre tus datos: info@bullandbear-academy.com.',
+    'Olivia está escribiendo…',
+    'Olivia no está disponible por el momento. Inténtalo de nuevo o contacta con la academia.',
+    'Cerrar chat', 'Hablar con Olivia', 'Nueva conversación', 'Contactar con la academia', 'Idioma del chat', 'Asistente IA', 'En espera', 'Tú',
+    'El equipo ha tomado el relevo. Puedes seguir escribiendo aquí.',
+    'Cursos', '¿Qué cursos ofrecen para alguien que empieza?', 'Trading Club', '¿Qué es el Trading Club?', '¿Cómo puedo contactar con la academia?',
+    'Dictar un mensaje', 'Escuchando…', 'No se pudo activar el micrófono. Puedes escribir tu pregunta.',
+  ],
+  en: [
+    'Your guide to the academy',
+    'Hello, I’m Olivia, Bull & Bear Academy’s AI assistant. I can help you explore courses, the Trading Club and a starting point that suits your experience. What would you like to learn?',
+    'Ask your question…', 'Send',
+    'I agree to Olivia processing and storing my messages to answer my enquiry.',
+    'Privacy',
+    'When you send a message with your agreement, your messages, language and page context are sent to the Olivia service and OpenAI to generate a reply. Conversations may be retained for team follow-up. Browser history lasts for the session and continues across languages. “New conversation” only clears that local history. For enquiries about your data: info@bullandbear-academy.com.',
+    'Olivia is typing…',
+    'Olivia is unavailable at the moment. Please try again or contact the academy.',
+    'Close chat', 'Chat with Olivia', 'New conversation', 'Contact the academy', 'Chat language', 'AI assistant', 'On standby', 'You',
+    'The team has taken over. You can keep writing here.',
+    'Courses', 'What courses do you offer for beginners?', 'Trading Club', 'What is the Trading Club?', 'How can I contact the academy?',
+    'Dictate a message', 'Listening…', 'The microphone could not be started. You can type your question.',
+  ],
+  ru: [
+    'Ваш проводник в академии',
+    'Здравствуйте! Я Olivia, ИИ-ассистент Bull & Bear Academy. Помогу узнать о курсах, трейдинг-клубе и выбрать отправную точку с учётом вашего опыта. Чему вы хотите научиться?',
+    'Ваш вопрос…', 'Отправить',
+    'Я соглашаюсь на обработку и хранение моих сообщений Olivia для ответа на мой запрос.',
+    'Конфиденциальность',
+    'При отправке сообщения с вашим согласием сообщения, язык и контекст страницы передаются сервису Olivia и OpenAI для подготовки ответа. Переписка может сохраняться для дальнейшей работы команды. История браузера хранится в течение сеанса и сохраняется при смене языка. «Новый разговор» удаляет только локальную историю. По вопросам о ваших данных: info@bullandbear-academy.com.',
+    'Olivia отвечает…',
+    'Olivia сейчас недоступна. Попробуйте снова или свяжитесь с академией.',
+    'Закрыть чат', 'Поговорить с Olivia', 'Новый разговор', 'Связаться с академией', 'Язык чата', 'ИИ-ассистент', 'В ожидании', 'Вы',
+    'Команда продолжит этот разговор. Вы можете писать здесь.',
+    'Курсы', 'Какие курсы вы предлагаете для начинающих?', 'Трейдинг-клуб', 'Что такое трейдинг-клуб?', 'Как связаться с академией?',
+    'Продиктовать сообщение', 'Слушаю…', 'Не удалось включить микрофон. Вы можете написать вопрос.',
+  ],
+  zh: [
+    '您的学院学习向导',
+    '您好，我是 Olivia，Bull & Bear Academy 的 AI 助手。我可以为您介绍课程、交易俱乐部，并根据您的经验寻找合适的学习起点。您想学习什么？',
+    '请输入您的问题…', '发送',
+    '我同意 Olivia 处理和保存我的消息，以回复我的咨询。',
+    '隐私',
+    '您同意并发送消息后，消息、语言和页面内容会传送至 Olivia 服务和 OpenAI，以生成回复。对话可能会保留，供团队跟进。浏览器历史保留至本次会话结束，切换语言后仍可继续。“新对话”只清除本地历史。如有数据相关问题，请联系 info@bullandbear-academy.com。',
+    'Olivia 正在回复…',
+    'Olivia 暂时无法使用。请重试或联系学院。',
+    '关闭聊天', '与 Olivia 对话', '新对话', '联系学院', '聊天语言', 'AI 助手', '待命中', '您',
+    '团队已接手对话，您可以继续在这里发送消息。',
+    '课程', '你们有哪些适合初学者的课程？', '交易俱乐部', '什么是交易俱乐部？', '如何联系学院？',
+    '语音输入', '正在聆听…', '无法启用麦克风，您可以输入问题。',
+  ],
+};
+
+export const oliviaCopy = Object.fromEntries(Object.entries(translations).map(([locale, values]) => [
+  locale, Object.fromEntries(keys.map((key, index) => [key, values[index]])),
+])) as Record<Locale, Record<typeof keys[number], string>>;

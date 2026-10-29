@@ -1,0 +1,80 @@
+/* Rounded floating treatment adapted from suitesmine-bot/components/O7Widget.jsx. */
+.olivia-widget{--olivia-gold:#c8aa70;--olivia-cream:#fffdf8;--olivia-soft:#f7f2e9;--olivia-ink:#2b2b2b;font:14px/1.5 var(--sans);color:var(--olivia-ink)}
+.olivia-widget *{box-sizing:border-box}
+.olivia-launcher{position:fixed;right:28px;bottom:24px;z-index:45;display:flex;align-items:center;gap:12px;background:none;padding:0;text-align:left}
+.olivia-launcher-label{padding:9px 16px;border:1px solid #e4d9c4;border-radius:16px;background:var(--olivia-cream);color:var(--olivia-ink);font-size:14px;font-weight:600;box-shadow:0 12px 35px #0002}
+.olivia-launcher-label small{display:block;font-size:10px;font-weight:400;color:#786b55}
+.olivia-launcher-icon{position:relative;display:grid;place-items:center;width:64px;height:64px;border-radius:50%;color:#fff;background:linear-gradient(135deg,#3d3932,#171512);box-shadow:0 24px 60px -20px #000c,inset 0 1px #ffffff2e;outline:1px solid #c8aa7073;transition:transform .2s}
+.olivia-launcher:hover .olivia-launcher-icon{transform:translateY(-3px)}
+.olivia-launcher-icon i{position:absolute;right:3px;top:3px;width:11px;height:11px;background:#34d399;border:2px solid #2b2b2b;border-radius:50%}
+.olivia-panel{position:fixed;inset:auto 28px 108px auto;margin:0;padding:0;width:430px;max-width:calc(100vw - 32px);height:min(720px,calc(100dvh - 140px));max-height:calc(100dvh - 140px);border:1px solid #ffffff66;border-radius:28px;background:var(--olivia-cream);color:var(--olivia-ink);box-shadow:0 46px 78px -28px #14100ac7,0 22px 38px -26px #14100aa3,0 8px 18px -14px #c8aa706b,inset 0 1px #ffffffcc;z-index:46;overflow:hidden;transform:perspective(1200px) translateY(-6px) rotateX(.45deg) rotateY(-.45deg);animation:bullbear-olivia-float 5.5s ease-in-out infinite}
+.olivia-panel[open]{display:flex;flex-direction:column}
+.olivia-panel:hover,.olivia-panel:focus-within{animation-play-state:paused}
+.olivia-head{flex-shrink:0;background:#2b2b2b;border-bottom:1px solid var(--olivia-gold);color:#fff;padding:18px 20px 14px}
+.olivia-heading{display:flex;align-items:center;gap:12px}
+.olivia-spark{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:1px solid #ffffff26;background:#ffffff1a;color:#f4d99a;font-size:27px;flex-shrink:0}
+.olivia-brand{font-size:10px;color:#ffffffb3;letter-spacing:.7px}
+.olivia-widget #olivia-title{font:600 18px/1.4 var(--sans);letter-spacing:0;margin:1px 0 0}
+.olivia-widget #olivia-title span{font-size:10px;font-weight:400;color:#f4d99a;margin-left:5px}
+.olivia-close{margin-left:auto;width:36px;height:36px;border-radius:50%;background:#ffffff1a;color:#fff;font:26px/1 var(--sans);padding:0}
+.olivia-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:13px}
+.olivia-presence{display:inline-flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid #ffffff1a;border-radius:999px;background:#ffffff12;color:#ffffffcc;font-size:11px}
+.olivia-presence i{width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#34d399;box-shadow:0 0 0 4px #34d39924,0 0 14px #34d399cc}
+.olivia-widget[data-idle=true] .olivia-presence i{background:#fbbf24;box-shadow:0 0 0 4px #fbbf2424,0 0 14px #fbbf24aa}
+.olivia-widget [data-olivia-language]{width:auto;max-width:130px;min-height:32px;padding:4px 8px;border:1px solid #ffffff33;border-radius:8px;background:#36332e;color:#fff;font-size:12px}
+.olivia-log{flex:1;min-height:65px;overflow-y:auto;overscroll-behavior:contain;padding:18px 16px;background:var(--olivia-soft);scroll-behavior:smooth}
+.olivia-message{max-width:92%;width:fit-content;border:1px solid #e3dbcd;border-radius:16px 16px 16px 4px;background:#fffdf8;margin-bottom:13px;padding:12px 14px;box-shadow:0 4px 9px #3b302508;overflow-wrap:anywhere}
+.olivia-message b{display:block;margin-bottom:5px;font-size:10px;font-weight:600;color:#8a754f}
+.olivia-message p{font:13px/1.75 var(--sans);white-space:pre-wrap}
+.olivia-message a{color:#96512b;text-decoration:underline;text-underline-offset:3px}
+.olivia-message[data-role=user]{margin-left:auto;background:#2b2b2b;border-color:#2b2b2b;border-radius:16px 16px 4px 16px;color:#fff}
+.olivia-message[data-role=user] b{color:#dec38f}
+.olivia-suggestions{display:flex;flex-wrap:wrap;gap:6px;background:var(--olivia-soft);padding:0 16px 13px;flex-shrink:0}
+.olivia-suggestions button{border:1px solid #b7a27e;border-radius:10px;background:transparent;padding:7px 10px;font:600 10px/1.5 var(--sans);color:#66573c}
+.olivia-suggestions button:hover{background:#efe4cd}
+.olivia-bottom{padding:12px;border-top:1px solid #ded7c9;background:var(--olivia-cream);overflow-y:auto;max-height:50%;flex-shrink:0}
+.olivia-consent{display:flex;align-items:flex-start;gap:8px;padding:10px;border-radius:10px;background:var(--olivia-soft);font-size:10px;line-height:1.6;color:#5f5546;cursor:pointer}
+.olivia-consent input{appearance:auto;width:15px;height:15px;min-height:0;padding:0;margin:1px 0 0;flex-shrink:0;accent-color:#2b2b2b}
+.olivia-form{display:flex;align-items:flex-end;gap:7px;margin:10px 0 0}
+.olivia-widget textarea{font:13px/1.6 var(--sans);width:100%;min-width:0;height:46px;min-height:46px;max-height:115px;resize:none;background:#fff;border:1px solid #ded7c9;border-radius:12px;padding:12px;color:#2b2b2b}
+.olivia-widget textarea::placeholder{color:#8c806d}
+.olivia-widget :is(textarea,select):focus-visible{outline:2px solid #c8aa70;outline-offset:1px}
+.olivia-send,.olivia-mic{display:grid;place-items:center;flex-shrink:0;width:44px;height:46px;padding:0;border-radius:12px;background:#2b2b2b;color:#fff}
+.olivia-mic{background:#fff;border:1px solid #ded7c9;color:#5f5546;width:36px}
+.olivia-mic[aria-pressed=true]{background:#fee2e2;color:#b91c1c}
+.olivia-widget button:disabled{opacity:.45;cursor:default}
+.olivia-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-top:9px;font-size:10px;color:#786b55}
+.olivia-meta button{background:none;padding:0;font-size:10px;white-space:nowrap}
+.olivia-privacy{min-width:0;text-align:right}
+.olivia-privacy summary{cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.olivia-privacy[open]{position:absolute;bottom:10px;left:12px;right:12px;max-height:65%;overflow:auto;background:#fffdf8;border:1px solid #ded7c9;border-radius:12px;padding:14px;box-shadow:0 0 0 500px #17151266;text-align:left;z-index:2}
+.olivia-privacy p{font-size:11px;line-height:1.7;margin-top:10px}
+.olivia-privacy a{display:inline-block;margin-top:10px;text-decoration:underline}
+.olivia-feedback:empty{display:none}
+.olivia-feedback{font:11px/1.6 var(--sans);padding:0 4px 9px;color:#786b55}
+.olivia-feedback[data-error=true]{color:#a13816}
+.olivia-contact{display:inline-block;margin-bottom:10px;font-size:11px;text-decoration:underline}
+@keyframes bullbear-olivia-float{0%,100%{transform:perspective(1200px) translateY(-6px) rotateX(.45deg) rotateY(-.45deg)}50%{transform:perspective(1200px) translateY(-12px) rotateX(.65deg) rotateY(-.25deg)}}
+@media(max-width:600px){
+  .olivia-launcher{right:16px;bottom:max(16px,env(safe-area-inset-bottom))}
+  .olivia-launcher-icon{width:56px;height:56px}
+  .olivia-launcher-label{font-size:12px;padding:7px 12px}
+  .olivia-panel{right:12px;bottom:calc(87px + env(safe-area-inset-bottom));width:calc(100vw - 24px);max-width:calc(100vw - 24px);height:min(680px,calc(100dvh - 115px));max-height:calc(100dvh - 115px);border-radius:24px;transform:none;animation:none}
+  .olivia-head{padding:14px 16px 12px}
+  .olivia-log{padding:14px 12px}
+  .olivia-suggestions{padding-inline:12px}
+  .olivia-message p{font-size:13px}
+  .olivia-widget textarea{font-size:16px;padding:9px 10px}
+}
+@media(prefers-reduced-motion:reduce){.olivia-panel{animation:none;transform:none}.olivia-log{scroll-behavior:auto}.olivia-launcher-icon{transition:none}}
+@media(max-height:600px){
+  .olivia-panel{height:calc(100dvh - 110px);max-height:calc(100dvh - 110px);animation:none;transform:none}
+  .olivia-head{padding:10px 14px}
+  .olivia-toolbar{margin-top:6px}
+  .olivia-brand{display:none}
+  .olivia-spark{width:32px;height:32px}
+  .olivia-log{min-height:0}
+  .olivia-suggestions{display:none}
+  .olivia-bottom{max-height:65%}
+  .olivia-consent{padding:6px 8px}
+}
