@@ -3,7 +3,7 @@ import {contentFor} from '../data/content';
 import {getLocale,translator} from '../i18n/index';
 const {section}=Astro.props;
 const locale=getLocale(Astro.url.pathname),t=translator(locale);
-const rows=contentFor(section,locale).filter(r=>['page','media','event'].includes(r.kind)&&!['site-hero','site-logo'].includes(r.id));
+const rows=contentFor(section,locale).filter(r=>['page','media','event'].includes(r.kind)&&!['site-hero','site-logo','bba-2db89f305dc212ff97b83c62101d'].includes(r.id));
 const now=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Mexico_City',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const eventRows=rows.filter(r=>r.kind==='event').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
 const otherRows=rows.filter(r=>r.kind!=='event');

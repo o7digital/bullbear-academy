@@ -55,3 +55,7 @@ Sans `DIRECTUS_URL`, le frontend utilise ses données locales ; `.env.example` d
 Le bootstrap est réexécutable : il ajoute les fiches et permissions manquantes, sans écraser les éditions. Les scripts `bootstrap.mjs`, `reconcile-source.mjs` et `translate-import.mjs` refusent une autre URL CMS que celle de Bull Academy dev. Ils doivent être exécutés avec les secrets du bon service, sans les afficher. L'import en lecture seule du site original se trouve dans `scripts/import-source.py` et exige Beautiful Soup 4.
 
 Le dépôt ne possédait ni `main` ni `dev` à la réception de cette tâche. `dev` a été créée depuis `setup/astro-preview` au commit `e88bfa9`. Aucune fusion de `main` n'a pu être effectuée car la branche n'existe pas sur le remote.
+
+## Vidéo de l’accueil
+
+Le bandeau vidéo d’origine (`zT8i84q4kDk`, chaîne officielle Bull & Bear) est intégré entre la définition du trading et le Trading Club dans les huit langues. Le Studio le présente dans **Inicio → Vídeo principal · Trading Club**. La fiche conserve son identifiant stable lors du remplacement par une autre vidéo YouTube ou un upload MP4/WebM. La lecture commence sans son à l’approche du bandeau ; les contrôles restent disponibles et la préférence système de réduction des animations désactive le démarrage automatique. Archiver cette fiche retire le bandeau du prochain build.
