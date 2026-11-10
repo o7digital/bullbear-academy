@@ -1,12 +1,13 @@
 ---
-import { getLocale, translator, localizePath } from "../../../i18n/index";
+import { getLocale, translator, localizePath, getCourses } from "../../../i18n/index";
+import {courseContent} from '../../../data/content';
 import Layout from '../../../layouts/Layout.astro';
-import courses from '../../../data/courses.json';
-
-const lang = getLocale(Astro.url.pathname);
-const t = translator(lang);
-export function getStaticPaths(){return courses.map(course=>({params:{slug:course.slug},props:{course}}));}
+import Checkout from '../../../components/Checkout.astro';
+export function getStaticPaths(){return getCourses('es').map(course=>({params:{slug:course.slug},props:{course}}));}
+const lang=getLocale(Astro.url.pathname),t=translator(lang);
 const {course: originalCourse}=Astro.props;
-const course={...originalCourse,title:t(originalCourse.title),duration:t(originalCourse.duration)};
+const detail=courseContent(originalCourse.slug,lang);
+const course={...originalCourse,...detail,title:detail?.title||t(originalCourse.title),duration:t(detail?.duration||originalCourse.duration)};
+const price=course.source_price?new Intl.NumberFormat(lang,{minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(course.source_price)):'';
 ---
-<Layout title={`${course.title} — Bull & Bear Academy`}><section class="page-hero wrap"><a class="text-button" href={localizePath("/tienda/", lang)}>{t("← Todos los cursos")}</a><span class="eyebrow product-eyebrow">{t(course.category)}</span><h1 class="course-title">{course.title}</h1></section><section class="section-pad wrap split course-detail"><div><span class="eyebrow">{t("EL SIGUIENTE PASO EN TU FORMACIÓN")}</span><h2>{t("Profundiza.")}<br/><em>{t("Construye criterio.")}</em></h2><p>{t("Conoce el programa y conversa con la academia para valorar si responde a tus objetivos.")}</p></div><div class="session-card"><dl><div><dt>{t("Duración publicada")}</dt><dd>{course.duration}</dd></div>{course.mentor && <div><dt>{t("Mentor")}</dt><dd>{course.mentor}</dd></div>}<div><dt>{t("Área de formación")}</dt><dd>{t(course.category)}</dd></div></dl><a href={course.official} class="button button-dark" target="_blank" rel="noopener noreferrer">{t("Consultar la ficha oficial")} <span>↗</span></a><p>{t("La academia confirma el temario, precio, modalidad y próximas fechas. La inscripción se realiza en sus canales oficiales.")}</p></div></section></Layout>
+<Layout title={`${course.title} — Bull & Bear Academy`}><section class="page-hero wrap"><a class="text-button" href={localizePath("/tienda/",lang)}>{t("← Todos los cursos")}</a><span class="eyebrow product-eyebrow">{t(course.category||'')}</span><h1 class="course-title">{course.title}</h1></section><section class="section-pad wrap split course-detail"><div class="course-program">{course.image&&<img class="course-cover" src={course.image} alt={course.title} width="600" height="600"/>}<span class="eyebrow">{t("EL SIGUIENTE PASO EN TU FORMACIÓN")}</span><h2>{t("Profundiza.")}<br/><em>{t("Construye criterio.")}</em></h2><div class="source-body">{course.body?.split(/\n\n+/).map(paragraph=><p>{paragraph}</p>)}</div></div><div class="session-card"><dl>{price&&<div><dt>{t('Precio publicado')}</dt><dd class="course-price">$ {price} <small>{course.currency||t('Moneda por confirmar')}</small></dd></div>}<div><dt>{t("Duración publicada")}</dt><dd>{course.duration}</dd></div>{course.mentor&&<div><dt>{t("Mentor")}</dt><dd>{course.mentor}</dd></div>}<div><dt>{t("Área de formación")}</dt><dd>{t(course.category||'')}</dd></div></dl><Checkout id={originalCourse.slug}/><a href={course.official||course.url} class="text-button" target="_blank" rel="noopener noreferrer">{t("Consultar la ficha oficial")} ↗</a><p>{t('La academia confirma disponibilidad, fechas e inclusiones antes de la inscripción.')}</p></div></section></Layout>

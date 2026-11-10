@@ -25,3 +25,11 @@ Les rubriques d'origine sont conservées avec une rédaction condensée et révi
 La nomination 2024 et la participation avec le Tec sont des présentations de l'académie ; elles n'ont pas fait l'objet d'une vérification indépendante. Les nouvelles dates ne sont pas connues : les calendriers existants sont affichés en archives.
 
 L'intégration fonctionnelle de la boutique, du CRM, des paiements et du calendrier n'est pas incluse dans ce mockup.
+
+## Import complet pour dev — 9 novembre 2026
+
+`cms/source-content.json` conserve les textes relevés directement sur les pages publiques, les descriptions courtes et longues des douze produits, les tarifs affichés et leur monnaie MXN issue des données structurées, les liens vidéo YouTube et les chemins des illustrations copiées sous `public/assets/official/`. Les anciennes données du catalogue restent disponibles comme solution locale. Les contenus sont traduits et conservés dans Directus ; les fiches originales restent liées depuis chaque cours. Les promesses commerciales du texte source ne constituent pas une vérification indépendante des résultats de la formation.
+
+Pages importées : accueil, nosotros, trading-club, aprende-lo-fundamental-del-trading, guerra-de-traders, proximos-eventos, contacto, preguntas-frecuentes-faq et aviso-de-privacidad. La route officielle `/videos/` est indisponible lors de cet import ; la page de navigation existante est conservée, avec les vidéos retrouvées dans les rubriques source. L’API WordPress est également restreinte ; l’import utilise les pages publiques HTML. Aucun espace privé, compte élève, commande existante ou contenu non public de WordPress n’a été migré.
+
+Les calendriers historiques sont conservés dans les archives. Les futurs événements ajoutés dans le Studio utilisent une date explicite et sont distingués des événements passés selon le fuseau America/Mexico_City. Le domaine officiel et ses DNS restent indépendants de la livraison dev.

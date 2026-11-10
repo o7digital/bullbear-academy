@@ -1,8 +1,11 @@
 ---
 import { getLocale, translator } from "../i18n/index";
+import {contentFor} from '../data/content';
 
 const lang = getLocale(Astro.url.pathname);
 const t = translator(lang);
-const mentors = [["José Luis Morales", "Forex", "jose-luis"], ["Joaquín Alducín", "Opciones & futuros", "joaquin"], ["Edgar Ulises", "Futuros", "edgar"], ["Luis González", "Criptomonedas", "luis"], ["Raúl Valdez", "Forex", "raul"], ["Héctor Rojas", "Futuros & acciones", "hector"]];
+const localMentors = [["José Luis Morales", "Forex", "jose-luis"], ["Joaquín Alducín", "Opciones & futuros", "joaquin"], ["Edgar Ulises", "Futuros", "edgar"], ["Luis González", "Criptomonedas", "luis"], ["Raúl Valdez", "Forex", "raul"], ["Héctor Rojas", "Futuros & acciones", "hector"]];
+const managed=contentFor('mentores',lang,'mentor');
+const mentors=managed.length?managed.map(row=>[row.title,row.body,row.image]):localMentors.map(([name,role,image])=>[name,role,`/assets/${image}.jpg`]);
 ---
-<section id="mentores" class="mentors section-pad wrap"><div class="section-label"><span>{t("NUESTROS TRADERS")}</span><span>{t("SEIS PERSPECTIVAS. UNA MISMA VOCACIÓN.")}</span></div><div class="section-heading"><h2>{t("La experiencia")}<br/><em>{t("se comparte.")}</em></h2><p>{t("Conoce al equipo que acompaña")}<br/>{t("tu formación en los mercados.")}</p></div><div class="mentor-grid">{mentors.map(([name,role,image],index)=><article class="mentor-card"><div class="mentor-photo"><img src={`/assets/${image}.jpg`} alt={name} width="600" height="720" loading="lazy"/><span class="mentor-index">0{index+1} /</span><span class="mentor-specialty">{t(role)}</span></div><h3>{name}</h3><p>{t(role)}</p></article>)}</div></section>
+<section id="mentores" class="mentors section-pad wrap"><div class="section-label"><span>{t("NUESTROS TRADERS")}</span><span>{t("SEIS PERSPECTIVAS. UNA MISMA VOCACIÓN.")}</span></div><div class="section-heading"><h2>{t("La experiencia")}<br/><em>{t("se comparte.")}</em></h2><p>{t("Conoce al equipo que acompaña")}<br/>{t("tu formación en los mercados.")}</p></div><div class="mentor-grid">{mentors.map(([name,role,image],index)=><article class="mentor-card"><div class="mentor-photo"><img src={image} alt={name} width="600" height="720" loading="lazy"/><span class="mentor-index">0{index+1} /</span><span class="mentor-specialty">{t(role)}</span></div><h3>{name}</h3><p>{t(role)}</p></article>)}</div></section>

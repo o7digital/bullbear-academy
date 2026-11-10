@@ -6,6 +6,7 @@ import italian from './it.json';
 import french from './fr.json';
 import portuguese from './pt.json';
 import courses from '../data/courses.json';
+import { records, overrideCopy, localized } from '../data/content';
 import { locales, type Locale } from './locales';
 export { locales, languageNames, languageTags, type Locale } from './locales';
 
@@ -13,11 +14,12 @@ const dictionaries: Record<Exclude<Locale, 'es'>, Record<string, string>> = { en
 export const getLocale = (pathname: string): Locale =>
   locales.find(locale => locale !== 'es' && new RegExp(`^/${locale}(?:/|$)`).test(pathname)) ?? 'es';
 export const translator = (locale: Locale) => (text: string): string =>
-  locale === 'es' ? text : dictionaries[locale][text] ?? text;
+  overrideCopy(text, locale) ?? (locale === 'es' ? text : dictionaries[locale][text] ?? text);
 
 const pageRoutes: Record<string, string> = {
   '/': '/en/',
   '/nosotros/': '/en/about/',
+  '/aviso-de-privacidad/': '/en/privacy/',
   '/trading-club/': '/en/trading-club/',
   '/videos/': '/en/videos/',
   '/aprende-lo-fundamental-del-trading/': '/en/webinars/',
@@ -52,14 +54,18 @@ export function localizePath(pathname: string, locale: Locale): string {
   const path = rawPath.endsWith('/') ? rawPath : `${rawPath}/`;
   const sourceLocale = getLocale(path);
   const englishPath = sourceLocale === 'es' ? path : `/en${path.slice(sourceLocale.length + 1)}`;
-  const spanish = spanishRoutes[englishPath] ?? path;
-  const result = locale === 'es' ? spanish : (routes[spanish] ?? path).replace(/^\/en\//, `/${locale}/`);
+  const dynamicCourse = englishPath.match(/^\/en\/courses\/([^/]+)\/$/);
+  const spanish = spanishRoutes[englishPath] ?? (dynamicCourse ? `/tienda/producto/${dynamicCourse[1]}/` : path);
+  const fallback = spanish.startsWith('/tienda/producto/') ? `/en/courses/${spanish.split('/')[3]}/` : path;
+  const result = locale === 'es' ? spanish : (routes[spanish] ?? fallback).replace(/^\/en\//, `/${locale}/`);
   return result + suffix;
 }
 
 export function getCourses(locale: Locale) {
   const t = translator(locale);
-  return courses.map(course => ({
+  const managed = records.filter(row => row.kind === 'course');
+  const catalog = managed.length ? managed.map(row => ({...localized(row, locale), category:row.category, slug:row.id, official:row.url, url:`/tienda/producto/${row.id}/`})) : courses;
+  return catalog.map(course => ({
     ...course,
     title: t(course.title),
     duration: t(course.duration),

@@ -1,5 +1,6 @@
 ---
 import Home from '../index.astro';
+import Privacy from '../aviso-de-privacidad.astro';
 import About from '../nosotros.astro';
 import Club from '../trading-club.astro';
 import Videos from '../videos.astro';
@@ -15,6 +16,7 @@ import { locales, getCourses, localizePath } from '../../i18n/index';
 export function getStaticPaths() {
   const pages = {
     '/': Home,
+    '/aviso-de-privacidad/': Privacy,
     '/nosotros/': About,
     '/trading-club/': Club,
     '/videos/': Videos,

@@ -1,6 +1,6 @@
 # Bull & Bear Academy
 
-Maquette Astro du site de Bull & Bear Academy, destinée à une présentation sur Vercel.
+Site Astro de Bull & Bear Academy, avec version de validation sur `dev`, contenus Directus et Studio éditorial en espagnol sur Railway.
 
 ## Développement
 
@@ -18,11 +18,11 @@ npm run build
 npm run preview
 ```
 
-Astro génère les 176 pages statiques dans `dist/`. Vercel utilise la configuration de `vercel.json`.
+Le build synchronise les contenus publiés de Directus, puis Astro génère les 184 pages statiques dans `dist/`. Vercel utilise la configuration de `vercel.json`.
 
 ## Périmètre
 
-La maquette conserve volontairement `noindex,nofollow` et les mentions de proposition. Le formulaire général de la page prépare un message WhatsApp. Le formulaire du chat enregistre les coordonnées et la demande dans le Channel Manager. Aucun paiement ni compte élève n'est connecté.
+La maquette conserve volontairement `noindex,nofollow` et les mentions de proposition. Le formulaire général prépare un message WhatsApp. Le formulaire du chat enregistre la demande dans le Channel Manager. Le [Studio de contenu](cms/README.md) permet d’éditer en espagnol, de traduire dans les sept autres langues et de publier sur dev. Stripe Checkout et ses webhooks sont préparés en mode test ; les paiements attendent les clés privées du compte de l’académie. Aucun compte élève n’est créé.
 
 Consulter [les consignes de livraison](INSTRUCTIONS-CODEX.md) et [les sources](SOURCES.md). Le domaine officiel et ses DNS ne doivent pas être modifiés pour cette présentation.
 
@@ -36,7 +36,7 @@ Les huit langues partagent les composants et les mises en page. Les traductions 
 
 Au chargement, les anciennes présentations de l’assistant enregistrées dans la session du navigateur sont mises à jour vers Charly. Le reste de la conversation, les messages du visiteur et les réponses humaines sont conservés. Les tests de cette migration se lancent avec `npm test`.
 
-Le widget est présenté sous le nom Charly IA. Il reprend le panneau arrondi, les couleurs crème et anthracite, les ombres et le mouvement flottant de `o7digital/suitesmine-bot/components/O7Widget.jsx`. Il est disponible sur les 176 pages. Le chat suit automatiquement la langue du site, sans sélecteur supplémentaire, et conserve le même échange en espagnol, anglais, russe, chinois simplifié, allemand, italien, français ou portugais. La dictée utilise la langue choisie lorsque le navigateur la prend en charge.
+Le widget est présenté sous le nom Charly IA. Il reprend le panneau arrondi, les couleurs crème et anthracite, les ombres et le mouvement flottant de `o7digital/suitesmine-bot/components/O7Widget.jsx`. Il est disponible sur les pages du site. Le chat suit automatiquement la langue du site, sans sélecteur supplémentaire, et conserve le même échange en espagnol, anglais, russe, chinois simplifié, allemand, italien, français ou portugais. La dictée utilise la langue choisie lorsque le navigateur la prend en charge.
 
 Les messages ne sont envoyés qu'après consentement. Le service partagé `https://olivia-ai.o7digital.com` fournit une identité signée liée au domaine `bullbear-academy-preview.vercel.app` et au profil isolé `bullbear`, puis conserve les échanges dans la boîte de réception Olivia. Aucun secret n'est présent dans ce site statique. Le navigateur conserve l'historique, le consentement et l'état du chat dans `sessionStorage`, y compris lors du changement de langue ; « Nouvelle conversation » efface cet historique local, sans supprimer les données du service.
 

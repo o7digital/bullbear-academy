@@ -1,0 +1,7 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AcademyContent from '../components/AcademyContent.astro';
+import {getLocale,translator} from '../i18n/index';
+const t=translator(getLocale(Astro.url.pathname));
+---
+<Layout title={t('Aviso de privacidad — Bull & Bear Academy')}><section class="page-hero wrap"><span class="eyebrow">BULL & BEAR ACADEMY</span><h1>{t('Aviso de privacidad')}</h1></section><AcademyContent section="privacidad"/></Layout>

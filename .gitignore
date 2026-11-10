@@ -6,3 +6,8 @@ dist/
 .env
 .env.*
 !.env.example
+
+.railway/
+public/_cms/
+src/data/cms.generated.json
+cms/studio/node_modules/

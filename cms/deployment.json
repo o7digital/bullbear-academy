@@ -1,0 +1,17 @@
+{
+  "project": "bull-academy-studio",
+  "project_id": "91235e4a-6cab-4339-9d2a-8f09a192e61b",
+  "environment": "dev",
+  "environment_id": "51398c51-a84c-4922-9e05-acbcb58bfc2e",
+  "services": {
+    "database": "7caca94d-a3cc-4228-9494-3a42599f77f5",
+    "directus": "d4660457-67f0-4039-a550-6837cd6adc4c",
+    "studio": "d94f3f11-0ad8-4dfd-b861-3ffb5f5c8e77"
+  },
+  "directus_url": "https://directus-dev-3e70.up.railway.app",
+  "studio_url": "https://bull-academy-studio-dev.up.railway.app",
+  "vercel_project": "prj_SY1DgyVxZz2SRgdHKAXFuFhFyooB",
+  "website_branch": "dev",
+  "stripe_mode": "test",
+  "website_preview_url": "https://bullbear-academy-dev.vercel.app"
+}

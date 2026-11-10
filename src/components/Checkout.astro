@@ -1,0 +1,17 @@
+---
+import {commerceURL} from '../data/content';
+import {getLocale,translator} from '../i18n/index';
+const {id}=Astro.props;
+const locale=getLocale(Astro.url.pathname),t=translator(locale);
+---
+{commerceURL&&<div class="course-checkout" data-checkout data-api={commerceURL} data-course={id} data-locale={locale}><button type="button" class="button button-dark" hidden>{t('Probar el pago con Stripe')} <span>↗</span></button><p class="checkout-status" role="status" aria-live="polite"></p></div>}
+<a href="#" class="text-button" data-contact>{t('Consultar inscripción')} ↗</a>
+<script>
+document.querySelectorAll<HTMLElement>('[data-checkout]').forEach(async panel=>{
+ const button=panel.querySelector<HTMLButtonElement>('button')!,status=panel.querySelector<HTMLElement>('[role=status]')!;
+ const messages={es:['Preparando el pago de prueba…','No se pudo abrir el pago. Vuelve a intentar.'],en:['Preparing test checkout…','Checkout could not open. Please try again.'],fr:['Préparation du paiement de test…','Impossible d’ouvrir le paiement. Réessaie.'],de:['Testzahlung wird vorbereitet…','Die Zahlung konnte nicht geöffnet werden. Bitte erneut versuchen.'],it:['Preparazione del pagamento di prova…','Impossibile aprire il pagamento. Riprova.'],pt:['Preparando o pagamento de teste…','Não foi possível abrir o pagamento. Tente novamente.'],ru:['Подготовка тестового платежа…','Не удалось открыть оплату. Попробуйте ещё раз.'],zh:['正在准备测试支付…','无法打开支付，请重试。']};
+ const text=messages[panel.dataset.locale as keyof typeof messages]||messages.es;
+ try{const r=await fetch(panel.dataset.api+'/commerce/status');const data=await r.json();if(r.ok&&data.enabled)button.hidden=false;}catch{}
+ button.addEventListener('click',async()=>{button.disabled=true;status.textContent=text[0];try{const response=await fetch(panel.dataset.api+'/commerce/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({course:panel.dataset.course,locale:panel.dataset.locale})});const data=await response.json();if(!response.ok||!/^https:\/\/checkout\.stripe\.com\//.test(data.url))throw new Error();window.location.assign(data.url);}catch{status.textContent=text[1];button.disabled=false;}});
+});
+</script>

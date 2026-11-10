@@ -8,9 +8,11 @@
   },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "build": "astro build",
-    "dev": "astro dev --host 0.0.0.0",
-    "preview": "astro preview --host 0.0.0.0"
+    "build": "node cms/sync.mjs && astro build",
+    "dev": "node cms/sync.mjs && astro dev --host 0.0.0.0",
+    "preview": "astro preview --host 0.0.0.0",
+    "cms:sync": "node cms/sync.mjs",
+    "cms:test": "npm --prefix cms/studio test"
   },
   "dependencies": {
     "astro": "7.3.8"
