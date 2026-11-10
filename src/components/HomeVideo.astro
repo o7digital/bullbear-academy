@@ -1,21 +1,24 @@
 ---
 import {records,localized} from '../data/content';
 import {getLocale,translator} from '../i18n/index';
+import {videoDetails} from '../../cms/studio/public/media.js';
+import VideoMedia from './VideoMedia.astro';
 const locale=getLocale(Astro.url.pathname),t=translator(locale);
 // Keep the original CMS record stable so replacing its video also replaces this banner.
 const id='bba-2db89f305dc212ff97b83c62101d';
 const managed=records.find(row=>row.id===id);
 const row=managed?localized(managed,locale):undefined;
 const video=row?.video||(!records.length?'zT8i84q4kDk':'');
-const youtube=/^[\w-]{11}$/.test(video);
+const details=videoDetails(video);
+const youtube=details?.type==='youtube';
 const title=row?.title||'Bull & Bear Academy · Trading Club';
-const poster=row?.image||(youtube?`https://i.ytimg.com/vi/${video}/hqdefault.jpg`:undefined);
+const poster=row?.image||details?.thumbnail;
 const embed=youtube?`https://www.youtube-nocookie.com/embed/${video}?mute=1&loop=1&playlist=${video}&controls=1&playsinline=1&rel=0`:'';
 ---
 {video&&<section id="video-trading-club" class="home-video-section section-pad wrap" aria-label={title}>
  <div class="section-label"><span>BULL & BEAR ACADEMY</span><span>{t('Trading Club')}</span></div>
  <div class="home-video-frame">
-  {youtube?<><img class="home-video-poster" src={poster} alt="" loading="lazy"/><iframe data-academy-video data-embed={embed} title={title} allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><noscript><a href={`https://www.youtube.com/watch?v=${video}`} target="_blank" rel="noopener noreferrer">▶ {title}</a></noscript></>:<video data-academy-video controls muted loop playsinline preload="metadata" poster={poster}><source src={video}/><a href={video}>{title}</a></video>}
+  {youtube?<><img class="home-video-poster" src={poster} alt="" loading="lazy"/><iframe data-academy-video data-embed={embed} title={title} allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><noscript><a href={`https://www.youtube.com/watch?v=${video}`} target="_blank" rel="noopener noreferrer">▶ {title}</a></noscript></>:details?.type==='file'?<video data-academy-video controls muted loop playsinline preload="metadata" poster={poster}><source src={video}/><a href={video}>{title}</a></video>:<VideoMedia value={video} title={title} poster={poster}/>}
  </div>
 </section>}
 <script>
@@ -28,5 +31,5 @@ const observer=new IntersectionObserver(entries=>{for(const entry of entries)if(
 document.querySelectorAll('[data-academy-video]').forEach(element=>observer.observe(element));
 </script>
 <style>
-.home-video-section{padding-top:52px;padding-bottom:52px}.home-video-frame{position:relative;aspect-ratio:16/8;overflow:hidden;border-radius:18px;background:#141414;isolation:isolate}.home-video-frame iframe,.home-video-frame video,.home-video-poster{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}.home-video-poster{z-index:-1}.home-video-frame noscript a{position:absolute;inset:0;display:grid;place-content:center;background:#0009;color:white;text-align:center;padding:30px}@media(max-width:700px){.home-video-section{padding-top:32px;padding-bottom:32px}.home-video-frame{aspect-ratio:16/10;border-radius:10px}}
+.home-video-frame :global(.published-video){height:100%;aspect-ratio:auto;border-radius:0}.home-video-section{padding-top:52px;padding-bottom:52px}.home-video-frame{position:relative;aspect-ratio:16/8;overflow:hidden;border-radius:18px;background:#141414;isolation:isolate}.home-video-frame iframe,.home-video-frame video,.home-video-poster{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}.home-video-poster{z-index:-1}.home-video-frame noscript a{position:absolute;inset:0;display:grid;place-content:center;background:#0009;color:white;text-align:center;padding:30px}@media(max-width:700px){.home-video-frame :global(.published-video){height:100%;aspect-ratio:auto;border-radius:0}.home-video-section{padding-top:32px;padding-bottom:32px}.home-video-frame{aspect-ratio:16/10;border-radius:10px}}
 </style>

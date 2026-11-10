@@ -2,7 +2,15 @@
   "name": "bull-academy-studio",
   "private": true,
   "type": "module",
-  "engines": {"node": ">=22"},
-  "scripts": {"start": "node server.mjs", "test": "node --test *.test.mjs", "check": "node --check server.mjs && node --check public/app.js && node --check translations.mjs"},
-  "dependencies": {"stripe": "23.1.0"}
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test *.test.mjs",
+    "check": "node --check server.mjs && node --check public/app.js && node --check translations.mjs && node --check public/media.js && node --check public/media-ui.js"
+  },
+  "dependencies": {
+    "stripe": "23.1.0"
+  }
 }

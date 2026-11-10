@@ -2,6 +2,7 @@ import {readFile,writeFile,mkdir,rm} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {assertReady} from './studio/content.mjs';
 import {loadEnvFile} from 'node:process';
+import {normalizeVideoInput,isUploadId} from './studio/public/media.js';
 try{loadEnvFile('.env');}catch(error){if(error.code!=='ENOENT')throw error;}
 const base=process.env.DIRECTUS_URL,token=process.env.DIRECTUS_READ_TOKEN;
 const empty={records:[],studio:'',commerce:'',generated_at:null};
@@ -17,7 +18,8 @@ if(records.filter(r=>r.kind==='course').length===0)throw new Error('At least one
 await rm('public/_cms',{recursive:true,force:true});await mkdir('public/_cms',{recursive:true});
 const files=new Map();
 for(const row of records)for(const field of ['image','video']){
- const file=row[field];if(!file||!/[a-f\d]{8}-(?:[a-f\d]{4}-){3}[a-f\d]{12}/i.test(file))continue;
+ if(field==='video'&&row.video)row.video=normalizeVideoInput(row.video);
+ const file=row[field];if(!isUploadId(file))continue;
  if(!files.has(file)){
   const meta=(await(await get('/files/'+encodeURIComponent(file)+'?fields=id,type,filesize,modified_on')).json()).data;
   const extension={'image/jpeg':'.jpg','image/png':'.png','image/webp':'.webp','image/avif':'.avif','video/mp4':'.mp4','video/webm':'.webm'}[meta.type];

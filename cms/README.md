@@ -12,7 +12,7 @@ Modifier les champs en espagnol puis choisir **Guardar y traducir**. Le serveur 
 
 **Publicar en dev** vérifie les traductions des fiches publiées puis appelle un Deploy Hook Vercel fixé à `dev`. Le message confirme la demande de publication ; le site est actualisé après la réussite du build. Un échec de CMS, de traduction ou de téléchargement conserve le dernier déploiement réussi. L'édition technique directe dans Directus ne traduit pas automatiquement les textes : utiliser le Studio. Après l'ajout de nouveaux textes dans le code, relancer le bootstrap puis traduire les nouvelles fiches avant publication.
 
-Photos JPG, PNG, WebP et AVIF ; vidéos MP4 et WebM jusqu'à 250 Mo ; les vidéos YouTube utilisent leur identifiant de 11 caractères. Les fichiers uploadés sont privés dans Directus puis copiés sur Vercel au build lorsqu'une fiche publiée les référence. Le build exige au moins un cours publié. Une vidéo volumineuse allonge le build et consomme du stockage/bande passante ; il n'y a pas de transcodage adaptatif.
+Photos JPG, PNG, WebP et AVIF jusqu’à 25 Mo ; les vidéos se publient en collant leur lien web. Les anciennes vidéos MP4/WebM uploadées restent compatibles (250 Mo maximum côté serveur). Les fichiers uploadés sont privés dans Directus puis copiés sur Vercel au build lorsqu'une fiche publiée les référence. Le build exige au moins un cours publié. Une vidéo volumineuse allonge le build et consomme du stockage/bande passante ; il n'y a pas de transcodage adaptatif.
 
 ## Stripe : préparation des paiements de test
 
@@ -59,3 +59,15 @@ Le dépôt ne possédait ni `main` ni `dev` à la réception de cette tâche. `d
 ## Vidéo de l’accueil
 
 Le bandeau vidéo d’origine (`zT8i84q4kDk`, chaîne officielle Bull & Bear) est intégré entre la définition du trading et le Trading Club dans les huit langues. Le Studio le présente dans **Inicio → Vídeo principal · Trading Club**. La fiche conserve son identifiant stable lors du remplacement par une autre vidéo YouTube ou un upload MP4/WebM. La lecture commence sans son à l’approche du bandeau ; les contrôles restent disponibles et la préférence système de réduction des animations désactive le démarrage automatique. Archiver cette fiche retire le bandeau du prochain build.
+
+## Studio visuel et bibliothèque médias
+
+L’interface adopte un en-tête sombre, une typographie plus affirmée, des actions orange et une bibliothèque de contenus visuels. **Videos** rassemble les vidéos de toutes les rubriques avec filtres par page et statut. Coller une adresse complète dans « Tu próximo vídeo empieza aquí » ou choisir « Añadir vídeo por enlace », puis renseigner le titre, la description, la page de destination et le statut. Les anciens identifiants YouTube restent compatibles et sont affichés comme des liens compréhensibles dans l’éditeur.
+
+Liens acceptés : YouTube (`www`, liens de partage, Shorts, Live), Vimeo (y compris le hash des liens non répertoriés), URL HTTPS de fichiers MP4/WebM et autres liens web. YouTube et Vimeo sont intégrés comme lecteurs sur les pages ; les fichiers MP4/WebM utilisent le lecteur natif ; les autres plateformes sont présentées comme liens vers leur page vidéo. Le serveur ne télécharge jamais les URL fournies par l’éditeur. La lecture reste soumise aux réglages de partage du fournisseur vidéo.
+
+**Fotos y galería** affiche les photos du site, avec leur rubrique, leur statut et leurs dimensions. L’envoi accepte jusqu’à 20 fichiers par lot, en JPG/PNG/WebP/AVIF, de 25 Mo maximum chacun. La page de destination est choisie avant l’envoi. Chaque photo est enregistrée comme un brouillon indépendant avec ses sept traductions ; les échecs peuvent être relancés sans réenvoyer les fichiers déjà reçus. Ouvrir « Editar » pour renseigner le titre/texte alternatif, la description/crédit et l’ordre ; le nom du fichier, son poids et ses dimensions y sont visibles.
+
+Les photos de galerie peuvent être sélectionnées puis marquées « Publicado » ou archivées en groupe. Les images liées à un cours ou à un mentor sont également visibles et éditables dans la bibliothèque, mais ne disposent pas de sélection d’archivage groupé pour éviter d’archiver le cours ou le mentor. « Publicar en dev » reste l’étape qui actualise le site après compilation. Une nouvelle fiche peut être enregistrée directement comme publiée si l’éditeur choisit explicitement ce statut ; le statut par défaut reste brouillon.
+
+Les tests `media.test.mjs` couvrent la normalisation des URL, les anciens uploads, les formats de liens, les paramètres Vimeo et le refus des protocoles dangereux. La vérification Firefox couvre un enregistrement vidéo par lien www., l’envoi réel de deux photos, leurs informations de fichiers, le choix de destination, les brouillons et l’archivage groupé. Les données temporaires de test sont supprimées après vérification.

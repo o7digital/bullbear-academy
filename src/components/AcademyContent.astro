@@ -1,6 +1,7 @@
 ---
 import {contentFor} from '../data/content';
 import {getLocale,translator} from '../i18n/index';
+import VideoMedia from './VideoMedia.astro';
 const {section}=Astro.props;
 const locale=getLocale(Astro.url.pathname),t=translator(locale);
 const rows=contentFor(section,locale).filter(r=>['page','media','event'].includes(r.kind)&&!['site-hero','site-logo','bba-2db89f305dc212ff97b83c62101d'].includes(r.id));
@@ -11,6 +12,6 @@ const otherRows=rows.filter(r=>r.kind!=='event');
 {rows.length>0&&<section class="section-pad wrap academy-content" aria-label={t('Contenido de la academia')}>
  <div class="section-label"><span>BULL & BEAR ACADEMY</span><span>{t('CONOCIMIENTO EN MOVIMIENTO')}</span></div>
  {otherRows.filter(r=>r.kind==='page').map(row=><article class="source-editorial"><h2>{row.title}</h2><div class="source-body">{row.body?.split(/\n\n+/).map(paragraph=><p>{paragraph}</p>)}</div></article>)}
- <div class="academy-media-grid">{otherRows.filter(r=>r.kind==='media').map(row=><figure>{section==='eventos'&&row.image&&<p class="eyebrow">{t('ARCHIVO DE SESIONES')}</p>}{row.video&&/^[\w-]{11}$/.test(row.video)?<a class="video-cover" href={`https://www.youtube.com/watch?v=${row.video}`} target="_blank" rel="noopener noreferrer"><img src={`https://i.ytimg.com/vi/${row.video}/hqdefault.jpg`} alt={row.title||''} loading="lazy"/><span>▶ {row.title}</span></a>:row.video?<video controls preload="metadata" poster={row.image}><source src={row.video}/><a href={row.video}>{row.title}</a></video>:row.image&&<img src={row.image} alt={row.title||''} loading="lazy"/>}<figcaption>{row.title}</figcaption>{row.body&&<p>{row.body}</p>}</figure>)}</div>
+ <div class="academy-media-grid">{otherRows.filter(r=>r.kind==='media').map(row=><figure>{section==='eventos'&&row.image&&<p class="eyebrow">{t('ARCHIVO DE SESIONES')}</p>}{row.video?<VideoMedia value={row.video} title={row.title} poster={row.image}/>:row.image&&<img src={row.image} alt={row.title||''} loading="lazy"/>}<figcaption>{row.title}</figcaption>{row.body&&<p>{row.body}</p>}</figure>)}</div>
  {eventRows.length>0&&<div class="academy-events">{eventRows.map(row=><article class="academy-event"><time datetime={row.date}>{row.date}</time><span class="eyebrow">{t((row.date||'')<now?'Archivo':'Próximos eventos')}</span><h3>{row.title}</h3><p class="source-body">{row.body}</p>{row.image&&<img src={row.image} alt={row.title||''} loading="lazy"/>}{row.url&&<a class="text-button" href={row.url} target="_blank" rel="noopener noreferrer">{t('Más información')} ↗</a>}</article>)}</div>}
 </section>}
