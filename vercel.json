@@ -3,12 +3,5 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "trailingSlash": true,
-  "redirects": [
-    {
-      "source": "/studio/:path*",
-      "destination": "https://bull-academy-studio-dev.up.railway.app/:path*",
-      "permanent": false
-    }
-  ]
+  "trailingSlash": true
 }
